@@ -62,3 +62,4 @@ local.properties
 .metadata/.log
 .metadata/.mylyn/.taskListIndex/segments_1
 .metadata/.plugins/org.eclipse.m2e.logback/0.log
+/target/
