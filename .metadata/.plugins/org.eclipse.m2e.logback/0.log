@@ -176,3 +176,13 @@
 2024-02-03 12:05:44,439 [Worker-30: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
 2024-02-03 12:05:44,441 [Worker-30: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\test\resources to target\test-classes
 2024-02-03 12:06:28,710 [Worker-5: Loading available Gradle versions] INFO  o.e.b.c.i.u.g.PublishedGradleVersions - Gradle version information cache is up-to-date. Trying to read.
+2024-02-03 12:39:00,572 [Worker-32: Creating project "unina.social.group"] INFO  o.e.m.c.i.l.LifecycleMappingFactory - Using org.eclipse.m2e.jdt.JarLifecycleMapping lifecycle mapping for MavenProject: com.oobd2324_12:unina.social.group:0.0.1-SNAPSHOT @ C:\Users\39324\Documents\GitHub\progetto-universitario\unina.social.group\pom.xml.
+2024-02-03 12:39:01,209 [Worker-32: Creating project "unina.social.group"] INFO  o.e.m.j.i.AbstractJavaProjectConfigurator - Adding source folder /unina.social.group/src/main/java
+2024-02-03 12:39:01,210 [Worker-32: Creating project "unina.social.group"] INFO  o.e.m.j.i.AbstractJavaProjectConfigurator - Adding resource folder /unina.social.group/src/main/resources
+2024-02-03 12:39:01,211 [Worker-32: Creating project "unina.social.group"] INFO  o.e.m.j.i.AbstractJavaProjectConfigurator - Adding source folder /unina.social.group/src/test/java
+2024-02-03 12:39:01,211 [Worker-32: Creating project "unina.social.group"] INFO  o.e.m.j.i.AbstractJavaProjectConfigurator - Adding resource folder /unina.social.group/src/test/resources
+2024-02-03 12:39:01,213 [Worker-32: Creating project "unina.social.group"] ERROR o.e.m.j.i.AbstractJavaProjectConfigurator - Failed to find a compatible VM for environment id 'JavaSE-1.8', falling back to workspace default
+2024-02-03 12:39:01,689 [Worker-7: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2024-02-03 12:39:01,696 [Worker-7: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2024-02-03 12:39:01,700 [Worker-7: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2024-02-03 12:39:01,702 [Worker-7: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\test\resources to target\test-classes
