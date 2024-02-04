@@ -113,7 +113,7 @@ public class UtenteValidator {
 			  || tipo.equalsIgnoreCase("admin_gruppo")
 			  || tipo.equalsIgnoreCase("owner_e_admin_gruppo"))) {
             
-			throw new IllegalArgumentException("Il tipo dell'utente deve essere 'semplice_utente', 'owner_gruppo', 'admin_gruppo', oppure 'owner_e_admin_gruppo");
+			throw new IllegalArgumentException("Il tipo dell'utente deve essere 'semplice_utente', 'owner_gruppo', 'admin_gruppo', oppure 'owner_e_admin_gruppo'.");
 		}
 	}
 

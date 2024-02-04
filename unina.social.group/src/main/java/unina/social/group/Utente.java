@@ -1,6 +1,7 @@
 package unina.social.group;
 
-import java.time.*;
+import java.time.LocalDate;
+import java.util.Objects;
 
 public class Utente {
 
@@ -103,5 +104,39 @@ public class Utente {
     	validator.validateTipo(tipo);
         this.tipo = tipo;    
     }
+    
+    @Override
+	public String toString() {
+		return "Utente [email=" + email + 
+			   ", username=" + username + 
+			   ", password=" + password + 
+			   ", nome=" + nome + 
+			   ", cognome=" + cognome + 
+			   ", dataNascita=" + dataNascita + 
+			   ", dataIscrizione=" + dataIscrizione +
+			   ", tipo=" + tipo + 
+			   "]";
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Utente other = (Utente) obj;
+		return Objects.equals(cognome, other.cognome) 
+			   && Objects.equals(dataIscrizione, other.dataIscrizione)
+			   && Objects.equals(dataNascita, other.dataNascita) 
+			   && Objects.equals(email, other.email)
+			   && Objects.equals(nome, other.nome) 
+			   && Objects.equals(password, other.password)
+			   && Objects.equals(tipo, other.tipo) 
+			   && Objects.equals(username, other.username);
+	}
+    
+    
  
  }
