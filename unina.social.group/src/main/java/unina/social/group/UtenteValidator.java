@@ -18,7 +18,6 @@ public class UtenteValidator {
 		this.validateTipo(tipo);
 	}
 	
-	
 	public void validateEmail(String email) {
 	    if (email == null || email.isEmpty()) {
             throw new IllegalArgumentException("L'indirizzo email non può essere nullo o vuoto.");
@@ -32,7 +31,6 @@ public class UtenteValidator {
             throw new IllegalArgumentException("L'indirizzo email non è valido.");
         }
 	}
-	
 	
 	public void validateUsername(String username) {
 	    if (username == null || username.isEmpty()) {
@@ -49,7 +47,6 @@ public class UtenteValidator {
 		}
 	}
 	
-	
 	public void validatePassword(String password) {
 	    if (password == null || password.isEmpty()) {
             throw new IllegalArgumentException("La password non può essere nulla o vuota.");
@@ -59,7 +56,6 @@ public class UtenteValidator {
 	    	throw new IllegalArgumentException("La password è troppo lunga. Il massimo numero di caratteri permessi è 20");
 	    }	
 	}
-	
 	
 	public void validateNome(String nome) {
 		if (nome == null || nome.isEmpty()) {
@@ -71,7 +67,6 @@ public class UtenteValidator {
 		}
 	}
 	
-	
 	public void validateCognome(String cognome) {
 		if (cognome == null || cognome.isEmpty()) {
 			throw new IllegalArgumentException("Il cognome non può essere nullo o vuoto.");
@@ -81,7 +76,6 @@ public class UtenteValidator {
 			throw new IllegalArgumentException("Il cognome è troppo lungo. Il massimo numero di caratteri permessi è 30");
 		}
 	}
-	
 	
 	public void validateDataNascita(LocalDate dataNascita) {
 	    if (dataNascita == null) {
@@ -94,14 +88,12 @@ public class UtenteValidator {
             throw new IllegalArgumentException("Data di nascita non valida: l'utente deve essere maggiorenne.");	
         }
 	}
-	
-	
+		
 	public void validateDataIscrizione(LocalDate dataIscrizione) {
 	    if (dataIscrizione == null) {
             throw new IllegalArgumentException("La data di iscrizione non può essere nulla.");
         }
 	}
-	
 	
 	public void validateTipo(String tipo) {
 	    if (tipo == null || tipo.isEmpty()) {
