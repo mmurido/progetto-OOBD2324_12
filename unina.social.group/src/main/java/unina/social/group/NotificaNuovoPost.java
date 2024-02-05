@@ -5,28 +5,25 @@ import java.util.Objects;
 
 public class NotificaNuovoPost {
 
-    private String idPost;
-    private String idUtente;
+	private Post post;
+    private String destinatario;
     private String testo;
     private LocalDateTime dataOra;
 
     private static NotificaNuovoPostValidator validator = new NotificaNuovoPostValidator();
+//Costruttori
+    public NotificaNuovoPost(String destinatario, String testo, LocalDateTime dataOra) {
+        validator.validateAllValues( destinatario, testo, dataOra);
+    public NotificaNuovoPost()
 
-    public NotificaNuovoPost(String idPost, String idUtente, String testo, LocalDateTime dataOra) {
-        validator.validateAllValues(idPost, idUtente, testo, dataOra);
-
-        this.idPost = idPost;
-        this.idUtente = idUtente;
+        
+        this.destinatario = destinatario;
         this.testo = testo;
         this.dataOra = dataOra;
     }
 
-    public String getIdPost() {
-        return idPost;
-    }
-
-    public String getIdUtente() {
-        return idUtente;
+    public String getdestinatario() {
+        return destinatario;
     }
 
     public String getTesto() {
@@ -37,14 +34,14 @@ public class NotificaNuovoPost {
         return dataOra;
     }
 
-    public void setIdPost(String idPost) {
-        validator.validateIdPost(idPost);
-        this.idPost = idPost;
+    public void setPost(String Post) {
+        validator.validatePost(Post);
+        this.Post = Post;
     }
 
-    public void setIdUtente(String idUtente) {
-        validator.validateIdUtente(idUtente);
-        this.idUtente = idUtente;
+    public void setIdUtente(String destinatario) {
+        validator.validatedestinatario();destinatario
+        this.destinatario = destinatario;
     }
 
     public void setTesto(String testo) {
@@ -60,8 +57,8 @@ public class NotificaNuovoPost {
     @Override
     public String toString() {
         return "NotificaNuovoPost{" +
-                "idPost='" + idPost + '\'' +
-                ", idUtente='" + idUtente + '\'' +
+                "Post='" + Post + '\'' +
+                ", destinatario='" + destinatario + '\'' +
                 ", testo='" + testo + '\'' +
                 ", dataOra=" + dataOra +
                 '}';
@@ -72,8 +69,8 @@ public class NotificaNuovoPost {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         NotificaNuovoPost that = (NotificaNuovoPost) obj;
-        return Objects.equals(idPost, that.idPost) &&
-                Objects.equals(idUtente, that.idUtente) &&
+        return Objects.equals(Post, that.Post) &&
+                Objects.equals(destinatario, that.destinatario) &&
                 Objects.equals(testo, that.testo) &&
                 Objects.equals(dataOra, that.dataOra);
     }

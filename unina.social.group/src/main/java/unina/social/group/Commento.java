@@ -5,28 +5,28 @@ import java.util.Objects;
 
 public class Commento {
 
-    private String idPost;
-    private String idUtente;
+    private String Post;
+    private String destinatario;
     private String testo;
     private LocalDateTime dataOra;
 
     private static CommentoValidator validator = new CommentoValidator();
 
-    public Commento(String idPost, String idUtente, String testo, LocalDateTime dataOra) {
-        validator.validateAllValues(idPost, idUtente, testo, dataOra);
+    public Commento(String Post, String destinatario, String testo, LocalDateTime dataOra) {
+        validator.validateAllValues(Post, destinatario, testo, dataOra);
 
-        this.idPost = idPost;
-        this.idUtente = idUtente;
+        this.Post = Post;
+        this.destinatario = destinatario;
         this.testo = testo;
         this.dataOra = dataOra;
     }
 
-    public String getIdPost() {
-        return idPost;
+    public String getPost() {
+        return Post;
     }
 
-    public String getIdUtente() {
-        return idUtente;
+    public String getdestinatario() {
+        return destinatario;
     }
 
     public String getTesto() {
@@ -37,14 +37,14 @@ public class Commento {
         return dataOra;
     }
 
-    public void setIdPost(String idPost) {
-        validator.validateIdPost(idPost);
-        this.idPost = idPost;
+    public void setPost(String Post) {
+        validator.validatePost(Post);
+        this.Post = Post;
     }
 
-    public void setIdUtente(String idUtente) {
-        validator.validateIdUtente(idUtente);
-        this.idUtente = idUtente;
+    public void setIdUtente(String destinatario) {
+        validator.validateIdUtente(destinatario);
+        this.destinatario = destinatario;
     }
 
     public void setTesto(String testo) {
@@ -60,8 +60,8 @@ public class Commento {
     @Override
     public String toString() {
         return "Commento{" +
-                "idPost='" + idPost + '\'' +
-                ", idUtente='" + idUtente + '\'' +
+                "Post='" + Post + '\'' +
+                ", destinatario='" + destinatario + '\'' +
                 ", testo='" + testo + '\'' +
                 ", dataOra=" + dataOra +
                 '}';
@@ -72,8 +72,8 @@ public class Commento {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         Commento commento = (Commento) obj;
-        return Objects.equals(idPost, commento.idPost) &&
-                Objects.equals(idUtente, commento.idUtente) &&
+        return Objects.equals(Post, commento.Post) &&
+                Objects.equals(destinatario, commento.destinatario) &&
                 Objects.equals(testo, commento.testo) &&
                 Objects.equals(dataOra, commento.dataOra);
     }
