@@ -1,4 +1,4 @@
-package unina.social.group;
+package validator;
 
 import org.apache.commons.validator.routines.UrlValidator;
 
@@ -14,7 +14,7 @@ public class ProfiloValidator {
 	
 	public void validateUrlFotoProfilo(String urlFotoProfilo) {
 		if (!UrlValidator.getInstance().isValid(urlFotoProfilo)) {
-			throw new IllegalArgumentException("L'url della foto profilo non è valido.");
+			throw new IllegalArgumentException("L'url della foto profilo non ï¿½ valido.");
 		}
 	}
 	
@@ -26,7 +26,7 @@ public class ProfiloValidator {
 	
 	public void validateDescrizione(String descrizione) {
 		if (descrizione.length() > 3000) {
-			throw new IllegalArgumentException("La desrizione è troppo lunga: il numero massimo di caratteri permessi è 3000.");
+			throw new IllegalArgumentException("La desrizione ï¿½ troppo lunga: il numero massimo di caratteri permessi ï¿½ 3000.");
 		}
 	}
 	
@@ -35,7 +35,7 @@ public class ProfiloValidator {
 		if (!(genere.equalsIgnoreCase("femmina")
 			  || genere.equalsIgnoreCase("maschio")
 			  || genere.equalsIgnoreCase("altro"))) {
-			throw new IllegalArgumentException("Il genere può essere 'femmina', 'maschio' oppure 'altro'.");
+			throw new IllegalArgumentException("Il genere puï¿½ essere 'femmina', 'maschio' oppure 'altro'.");
 		}
 	}
 }

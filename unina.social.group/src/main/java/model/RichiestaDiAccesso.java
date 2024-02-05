@@ -1,7 +1,10 @@
-package unina.social.group;
+package model;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
+
+import validator.RichiestaValidator;
+
 import java.time.LocalDate;
 
 public class RichiestaDiAccesso {

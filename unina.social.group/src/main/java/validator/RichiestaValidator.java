@@ -1,7 +1,9 @@
-package unina.social.group;
+package validator;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+
+import model.Utente;
 
 public class RichiestaValidator {
 
@@ -21,7 +23,7 @@ public class RichiestaValidator {
 	
 	public void validateStato(String stato) {
 	    if (stato == null || stato.isEmpty()) {
-            throw new IllegalArgumentException("Lo stato della richiesta non può essere nullo o vuoto.");
+            throw new IllegalArgumentException("Lo stato della richiesta non puï¿½ essere nullo o vuoto.");
         }
 	    
 		if (!(stato.equalsIgnoreCase("in_attesa")
@@ -35,25 +37,25 @@ public class RichiestaValidator {
 	public void validateDataAccettazione(LocalDate dataAccettazione, LocalDateTime dataOraInvio, String stato) {
 		if (dataAccettazione == null) {
 			if(stato.equalsIgnoreCase("accettata")) {
-				throw new IllegalArgumentException("La data di accettazione della richiesta non può essere nulla se la richiesta è accettata.");
+				throw new IllegalArgumentException("La data di accettazione della richiesta non puï¿½ essere nulla se la richiesta ï¿½ accettata.");
 			}
 		}
 		
 		if (dataAccettazione != null) {
 			
 			if (dataAccettazione.isBefore(dataOraInvio.toLocalDate())) {
-				throw new IllegalArgumentException("La data di accettazione della richiesta non può essere precedente alla data di invio della richiesta stessa.");
+				throw new IllegalArgumentException("La data di accettazione della richiesta non puï¿½ essere precedente alla data di invio della richiesta stessa.");
 			}
 			
 			if (!stato.equalsIgnoreCase("accettata")) {
-				throw new IllegalArgumentException("La data di accettazione della richiesta deve essere nulla se la richiesta non è stata accettata.");
+				throw new IllegalArgumentException("La data di accettazione della richiesta deve essere nulla se la richiesta non ï¿½ stata accettata.");
 			}
 		}
 	}
 	
 	public void validateUtente(Utente utente) {
 		if (utente == null) {
-			throw new IllegalArgumentException("Il mittente/destinatario della richiesta non può essere nullo.");
+			throw new IllegalArgumentException("Il mittente/destinatario della richiesta non puï¿½ essere nullo.");
 		}
 		
 	}

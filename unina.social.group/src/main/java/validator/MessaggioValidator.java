@@ -1,6 +1,8 @@
-package unina.social.group;
+package validator;
 
 import java.time.LocalDateTime;
+
+import model.Utente;
 
 public class MessaggioValidator {
 
@@ -13,11 +15,11 @@ public class MessaggioValidator {
 	
 	public void validateTesto(String testo) {
 		if (testo == null || testo.isEmpty()) {
-			throw new IllegalArgumentException("Il testo del messaggio non può essere nullo o vuoto.");
+			throw new IllegalArgumentException("Il testo del messaggio non puï¿½ essere nullo o vuoto.");
 		}
 		
 		if (testo.length() > 3000) {
-			throw new IllegalArgumentException("Il testo del messaggio è troppo lungo: il numero massimo di caratteri permessi è 3000.");
+			throw new IllegalArgumentException("Il testo del messaggio ï¿½ troppo lungo: il numero massimo di caratteri permessi ï¿½ 3000.");
 		}
 	}
 	
@@ -29,7 +31,7 @@ public class MessaggioValidator {
 	
 	public void validateUtente(Utente utente) {
 		if (utente == null) {
-			throw new IllegalArgumentException("Il mittente/destinatario della richiesta non può essere nullo.");
+			throw new IllegalArgumentException("Il mittente/destinatario della richiesta non puï¿½ essere nullo.");
 		}
 	}
 }

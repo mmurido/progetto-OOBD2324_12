@@ -1,6 +1,9 @@
-package unina.social.group;
+package validator;
 
 import java.time.LocalDateTime;
+
+import model.Tema;
+import model.Utente;
 
 public class GruppoValidator {
 	
@@ -14,11 +17,11 @@ public class GruppoValidator {
 
 	public void validateNome(String nome) {
 		if (nome == null || nome.isEmpty()) {
-			throw new IllegalArgumentException("Il nome del gruppo non può essere nullo o vuoto.");
+			throw new IllegalArgumentException("Il nome del gruppo non puï¿½ essere nullo o vuoto.");
 		}
 		
 		if (nome.length() > 30) {
-			throw new IllegalArgumentException("Il nome del gruppo è troppo lungo: il massimo numero di caratteri permesso è 30.");
+			throw new IllegalArgumentException("Il nome del gruppo ï¿½ troppo lungo: il massimo numero di caratteri permesso ï¿½ 30.");
 		}
 	}
 
@@ -30,19 +33,19 @@ public class GruppoValidator {
 	
 	public void validateDescrizione(String descrizione) {
 		if (descrizione.length() > 3000) {
-			throw new IllegalArgumentException("La descrizione del gruppo è troppo lunga: il massimo numero di caratteri permesso è 3000.");
+			throw new IllegalArgumentException("La descrizione del gruppo ï¿½ troppo lunga: il massimo numero di caratteri permesso ï¿½ 3000.");
 		}
 	}
 	
 	public void validateTema(Tema tema) {
 		if (tema == null) {
-			throw new IllegalArgumentException("Il tema del gruppo non può essere nullo.");
+			throw new IllegalArgumentException("Il tema del gruppo non puï¿½ essere nullo.");
 		}
 	}
 	
 	public void validateOwner(Utente owner) {
 		if (owner == null) {
-			throw new IllegalArgumentException("L'owner del gruppo non può essere nullo.");
+			throw new IllegalArgumentException("L'owner del gruppo non puï¿½ essere nullo.");
 		}
 	}
 }

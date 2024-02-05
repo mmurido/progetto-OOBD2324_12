@@ -1,7 +1,9 @@
-package unina.social.group;
+package model;
 
 import java.time.LocalDate;
 import java.util.Objects;
+
+import validator.UtenteValidator;
 
 public class Utente {
 

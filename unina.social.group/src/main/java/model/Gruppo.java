@@ -1,7 +1,9 @@
-package unina.social.group;
+package model;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
+
+import validator.GruppoValidator;
 
 public class Gruppo {
 
