@@ -6,23 +6,26 @@ import java.util.Objects;
 public class NotificaNuovoPost {
 
 	private Post post;
-    private String destinatario;
+    private Utente destinatario;
     private String testo;
     private LocalDateTime dataOra;
 
     private static NotificaNuovoPostValidator validator = new NotificaNuovoPostValidator();
 //Costruttori
-    public NotificaNuovoPost(String destinatario, String testo, LocalDateTime dataOra) {
+    public NotificaNuovoPost(Utente destinatario, String testo, LocalDateTime dataOra, Post post) {
         validator.validateAllValues( destinatario, testo, dataOra);
-    public NotificaNuovoPost()
+    
 
-        
+        this.post = post;
         this.destinatario = destinatario;
         this.testo = testo;
         this.dataOra = dataOra;
     }
+    public Post getPost() {
+    	return post;
+    }
 
-    public String getdestinatario() {
+    public Utente getdestinatario() {
         return destinatario;
     }
 
@@ -34,13 +37,13 @@ public class NotificaNuovoPost {
         return dataOra;
     }
 
-    public void setPost(String Post) {
-        validator.validatePost(Post);
-        this.Post = Post;
+    public void setPost(Post post) {
+        validator.validatePost(post);
+        this.post = post;
     }
 
-    public void setIdUtente(String destinatario) {
-        validator.validatedestinatario();destinatario
+    public void setIdUtente(Utente destinatario) {
+        validator.validateDestinatario(); 
         this.destinatario = destinatario;
     }
 
@@ -57,8 +60,8 @@ public class NotificaNuovoPost {
     @Override
     public String toString() {
         return "NotificaNuovoPost{" +
-                "Post='" + Post + '\'' +
-                ", destinatario='" + destinatario + '\'' +
+                "Post='" +pPost + '\'' +
+                ", destinatario='" + destinatario.getUsername() + '\'' +
                 ", testo='" + testo + '\'' +
                 ", dataOra=" + dataOra +
                 '}';
@@ -69,7 +72,7 @@ public class NotificaNuovoPost {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         NotificaNuovoPost that = (NotificaNuovoPost) obj;
-        return Objects.equals(Post, that.Post) &&
+        return Objects.equals(post, that.post) &&
                 Objects.equals(destinatario, that.destinatario) &&
                 Objects.equals(testo, that.testo) &&
                 Objects.equals(dataOra, that.dataOra);

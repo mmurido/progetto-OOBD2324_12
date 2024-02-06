@@ -5,28 +5,28 @@ import java.util.Objects;
 
 public class Commento {
 
-    private String Post;
-    private String destinatario;
+    private Post post;
+    private Utente autore;
     private String testo;
     private LocalDateTime dataOra;
 
     private static CommentoValidator validator = new CommentoValidator();
 
-    public Commento(String Post, String destinatario, String testo, LocalDateTime dataOra) {
-        validator.validateAllValues(Post, destinatario, testo, dataOra);
+    public Commento(String Post, Utente autore, String testo, LocalDateTime dataOra) {
+        validator.validateAllValues(Post, autore, testo, dataOra);
 
-        this.Post = Post;
-        this.destinatario = destinatario;
+        this.post = post;
+        this.autore = autore;
         this.testo = testo;
         this.dataOra = dataOra;
     }
 
-    public String getPost() {
-        return Post;
+    public Post getPost() {
+        return post;
     }
 
-    public String getdestinatario() {
-        return destinatario;
+    public Utente getAutore() {
+        return autore;
     }
 
     public String getTesto() {
@@ -37,14 +37,14 @@ public class Commento {
         return dataOra;
     }
 
-    public void setPost(String Post) {
-        validator.validatePost(Post);
-        this.Post = Post;
+    public void setPost(Post post) {
+        validator.validatePost(post);
+        this.post = post;
     }
 
-    public void setIdUtente(String destinatario) {
-        validator.validateIdUtente(destinatario);
-        this.destinatario = destinatario;
+    public void setAutore(Utente autore) {
+        validator.validateAutore(autore);
+        this.autore = autore;
     }
 
     public void setTesto(String testo) {
@@ -60,8 +60,8 @@ public class Commento {
     @Override
     public String toString() {
         return "Commento{" +
-                "Post='" + Post + '\'' +
-                ", destinatario='" + destinatario + '\'' +
+                "Post='" + post + '\'' +
+                ", autore='" + autore.getUsername() + '\'' +
                 ", testo='" + testo + '\'' +
                 ", dataOra=" + dataOra +
                 '}';
@@ -72,8 +72,8 @@ public class Commento {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         Commento commento = (Commento) obj;
-        return Objects.equals(Post, commento.Post) &&
-                Objects.equals(destinatario, commento.destinatario) &&
+        return Objects.equals(post, commento.post) &&
+                Objects.equals(autore, commento.autore) &&
                 Objects.equals(testo, commento.testo) &&
                 Objects.equals(dataOra, commento.dataOra);
     }
