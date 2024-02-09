@@ -1,6 +1,8 @@
-package unina.social.group;
+package model;
 
 import java.util.Objects;
+
+import validator.ProfiloValidator;
 
 public class Profilo {
 

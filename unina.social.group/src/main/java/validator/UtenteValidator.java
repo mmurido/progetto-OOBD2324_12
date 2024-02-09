@@ -1,4 +1,4 @@
-package unina.social.group;
+package validator;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -18,74 +18,68 @@ public class UtenteValidator {
 		this.validateTipo(tipo);
 	}
 	
-	
 	public void validateEmail(String email) {
 	    if (email == null || email.isEmpty()) {
-            throw new IllegalArgumentException("L'indirizzo email non può essere nullo o vuoto.");
+            throw new IllegalArgumentException("L'indirizzo email non puï¿½ essere nullo o vuoto.");
         }
 	    
 	    if (email.length() > 254) {
-	    	throw new IllegalArgumentException("L'indirizzo email è troppo lungo. Il massimo numero di caratteri permessi è 254");
+	    	throw new IllegalArgumentException("L'indirizzo email ï¿½ troppo lungo. Il massimo numero di caratteri permessi ï¿½ 254");
 	    }
 
         if (!EmailValidator.getInstance().isValid(email)) {
-            throw new IllegalArgumentException("L'indirizzo email non è valido.");
+            throw new IllegalArgumentException("L'indirizzo email non ï¿½ valido.");
         }
 	}
 	
-	
 	public void validateUsername(String username) {
 	    if (username == null || username.isEmpty()) {
-            throw new IllegalArgumentException("L'username non può essere nullo o vuoto.");
+            throw new IllegalArgumentException("L'username non puï¿½ essere nullo o vuoto.");
         }
 	    
 	    if (username.length() > 15) {
-	    	throw new IllegalArgumentException("L'username è troppo lungo. Il massimo numero di caratteri permessi è 15");
+	    	throw new IllegalArgumentException("L'username ï¿½ troppo lungo. Il massimo numero di caratteri permessi ï¿½ 15");
 	    }
 	    
 		String USERNAME_PATTERN = "^[A-Za-z0-9._]{4,15}$";
 		if (!username.matches(USERNAME_PATTERN)) {
-            throw new IllegalArgumentException("L'username non è valido.");	
+            throw new IllegalArgumentException("L'username non ï¿½ valido.");	
 		}
 	}
-	
 	
 	public void validatePassword(String password) {
 	    if (password == null || password.isEmpty()) {
-            throw new IllegalArgumentException("La password non può essere nulla o vuota.");
+            throw new IllegalArgumentException("La password non puï¿½ essere nulla o vuota.");
         }
 	    
 	    if (password.length() > 20) {
-	    	throw new IllegalArgumentException("La password è troppo lunga. Il massimo numero di caratteri permessi è 20");
+	    	throw new IllegalArgumentException("La password ï¿½ troppo lunga. Il massimo numero di caratteri permessi ï¿½ 20");
 	    }	
 	}
 	
-	
 	public void validateNome(String nome) {
 		if (nome == null || nome.isEmpty()) {
-			throw new IllegalArgumentException("Il nome non può essere nullo o vuoto.");
+			throw new IllegalArgumentException("Il nome non puï¿½ essere nullo o vuoto.");
 		}
 		
 		if (nome.length() > 30) {
-			throw new IllegalArgumentException("Il nome è troppo lungo. Il massimo numero di caratteri permessi è 30");
+			throw new IllegalArgumentException("Il nome ï¿½ troppo lungo. Il massimo numero di caratteri permessi ï¿½ 30");
 		}
 	}
-	
 	
 	public void validateCognome(String cognome) {
 		if (cognome == null || cognome.isEmpty()) {
-			throw new IllegalArgumentException("Il cognome non può essere nullo o vuoto.");
+			throw new IllegalArgumentException("Il cognome non puï¿½ essere nullo o vuoto.");
 		}
 		
 		if (cognome.length() > 30) {
-			throw new IllegalArgumentException("Il cognome è troppo lungo. Il massimo numero di caratteri permessi è 30");
+			throw new IllegalArgumentException("Il cognome ï¿½ troppo lungo. Il massimo numero di caratteri permessi ï¿½ 30");
 		}
 	}
 	
-	
 	public void validateDataNascita(LocalDate dataNascita) {
 	    if (dataNascita == null) {
-            throw new IllegalArgumentException("La data di nascita non può essere nulla.");
+            throw new IllegalArgumentException("La data di nascita non puï¿½ essere nulla.");
         }
 	    
         LocalDate oggi = LocalDate.now();
@@ -94,18 +88,16 @@ public class UtenteValidator {
             throw new IllegalArgumentException("Data di nascita non valida: l'utente deve essere maggiorenne.");	
         }
 	}
-	
-	
+		
 	public void validateDataIscrizione(LocalDate dataIscrizione) {
 	    if (dataIscrizione == null) {
-            throw new IllegalArgumentException("La data di iscrizione non può essere nulla.");
+            throw new IllegalArgumentException("La data di iscrizione non puï¿½ essere nulla.");
         }
 	}
 	
-	
 	public void validateTipo(String tipo) {
 	    if (tipo == null || tipo.isEmpty()) {
-            throw new IllegalArgumentException("Il tipo non può essere nullo o vuoto.");
+            throw new IllegalArgumentException("Il tipo non puï¿½ essere nullo o vuoto.");
         }
 	    
 		if (!(tipo.equalsIgnoreCase("semplice_utente")

@@ -1,10 +1,13 @@
-package unina.social.group;
+package model;
 
 import java.time.LocalDate;
 import java.util.Objects;
 
+import validator.UtenteValidator;
+
 public class Utente {
 
+	private String idUtente;
     private String email;
     private String username;
     private String password;
@@ -31,7 +34,11 @@ public class Utente {
     }
     
 
-	// Metodi getter    
+	// Metodi getter   
+    public String getIdUtente() {
+    	return idUtente;
+    }
+    
     public String getEmail() {
         return email;
     }
@@ -64,7 +71,11 @@ public class Utente {
         return tipo;
     }
 
-    // Metodi setter    
+    // Metodi setter 
+    public void setIdUtente(String idUtente) {
+    	this.idUtente = idUtente;
+    }
+    
     public void setEmail(String email) {
     	validator.validateEmail(email);
         this.email = email;
@@ -107,7 +118,8 @@ public class Utente {
     
     @Override
 	public String toString() {
-		return "Utente [email=" + email + 
+		return "Utente [idUtente=" + idUtente +
+			   ", email=" + email + 
 			   ", username=" + username + 
 			   ", password=" + password + 
 			   ", nome=" + nome + 
@@ -127,7 +139,8 @@ public class Utente {
 		if (getClass() != obj.getClass())
 			return false;
 		Utente other = (Utente) obj;
-		return Objects.equals(cognome, other.cognome) 
+		return Objects.equals(idUtente, other.idUtente)
+			   && Objects.equals(cognome, other.cognome) 
 			   && Objects.equals(dataIscrizione, other.dataIscrizione)
 			   && Objects.equals(dataNascita, other.dataNascita) 
 			   && Objects.equals(email, other.email)
