@@ -154,7 +154,7 @@ public class MainScreen extends Application {
             SignUpPage signUpPage = new SignUpPage();
             Scene nextScene;
 			try {
-				nextScene = signUpPage.getScene();
+				nextScene = signUpPage.getScene(primaryStage);
 				primaryStage.setScene(nextScene);
 			} catch (Exception exception) {
 				exception.printStackTrace();
