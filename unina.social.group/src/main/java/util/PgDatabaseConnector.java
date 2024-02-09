@@ -25,7 +25,6 @@ public class PgDatabaseConnector {
     	catch(SQLException e) 
     	{
     		System.out.println("Connessione alla base di dati fallita." + e);
-    		System.out.println(e);
         	return null;
     	}
     }
