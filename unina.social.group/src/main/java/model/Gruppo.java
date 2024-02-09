@@ -7,6 +7,7 @@ import validator.GruppoValidator;
 
 public class Gruppo {
 
+	private String idGruppo;
 	private String nome;
 	private LocalDateTime dataOraCreazione;
 	private String descrizione;
@@ -25,6 +26,10 @@ public class Gruppo {
 		this.owner = owner;
 	}
 
+	public String getIdGruppo() {
+		return idGruppo;
+	}
+	
 	public String getNome() {
 		return nome;
 	}
@@ -45,6 +50,10 @@ public class Gruppo {
 		return owner;
 	}
 
+	public void setIdGruppo(String idGruppo) {
+		this.idGruppo = idGruppo;
+	}
+	
 	public void setNome(String nome) {
 		validator.validateNome(nome);
 		this.nome = nome;
@@ -72,7 +81,8 @@ public class Gruppo {
 
 	@Override
 	public String toString() {
-		return "Gruppo [nome=" + nome + 
+		return "Gruppo [idGruppo =" + idGruppo +
+			   ", nome=" + nome + 
 			   ", dataOraCreazione=" + dataOraCreazione + 
 			   ", descrizione=" + descrizione + 
 			   ", tema=" + tema.getTema() + 
@@ -89,7 +99,8 @@ public class Gruppo {
 		if (getClass() != obj.getClass())
 			return false;
 		Gruppo other = (Gruppo) obj;
-		return Objects.equals(dataOraCreazione, other.dataOraCreazione)
+		return Objects.equals(idGruppo, other.idGruppo)
+			   && Objects.equals(dataOraCreazione, other.dataOraCreazione)
 			   && Objects.equals(descrizione, other.descrizione) 
 			   && Objects.equals(nome, other.nome)
 			   && Objects.equals(owner, other.owner) 
