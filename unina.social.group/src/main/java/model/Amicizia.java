@@ -1,4 +1,4 @@
-package unina.social.group;
+package model;
 
 public class Amicizia {
 	

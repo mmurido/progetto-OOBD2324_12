@@ -1,4 +1,4 @@
-package unina.social.group;
+package model;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -12,7 +12,7 @@ public class Commento {
 
     private static CommentoValidator validator = new CommentoValidator();
 
-    public Commento(String Post, Utente autore, String testo, LocalDateTime dataOra) {
+    public Commento(Post Post, Utente autore, String testo, LocalDateTime dataOra) {
         validator.validateAllValues(Post, autore, testo, dataOra);
 
         this.post = post;

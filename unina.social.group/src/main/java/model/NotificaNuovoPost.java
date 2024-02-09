@@ -1,4 +1,4 @@
-package unina.social.group;
+package model;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -11,9 +11,10 @@ public class NotificaNuovoPost {
     private LocalDateTime dataOra;
 
     private static NotificaNuovoPostValidator validator = new NotificaNuovoPostValidator();
-//Costruttori
+    
+    //Costruttori
     public NotificaNuovoPost(Utente destinatario, String testo, LocalDateTime dataOra, Post post) {
-        validator.validateAllValues( destinatario, testo, dataOra);
+        validator.validateAllValues(post, destinatario, testo, dataOra);
     
 
         this.post = post;
@@ -43,7 +44,7 @@ public class NotificaNuovoPost {
     }
 
     public void setIdUtente(Utente destinatario) {
-        validator.validateDestinatario(); 
+        validator.validateDestinatario(destinatario); 
         this.destinatario = destinatario;
     }
 
@@ -60,7 +61,7 @@ public class NotificaNuovoPost {
     @Override
     public String toString() {
         return "NotificaNuovoPost{" +
-                "Post='" +pPost + '\'' +
+                "Post='" + post + '\'' +
                 ", destinatario='" + destinatario.getUsername() + '\'' +
                 ", testo='" + testo + '\'' +
                 ", dataOra=" + dataOra +

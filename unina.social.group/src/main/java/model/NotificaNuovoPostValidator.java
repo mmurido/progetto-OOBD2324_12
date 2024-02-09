@@ -1,8 +1,8 @@
-package unina.social.group;
+package model;
 
 import java.time.LocalDateTime;
 
-public class NotificaValidator {
+public class NotificaNuovoPostValidator {
 
     public void validateAllValues(Post post, Utente destinatario, String testo, LocalDateTime dataOra) {
         validatePost(post);

@@ -1,4 +1,4 @@
-package unina.social.group;
+package model;
 
 public class AmministrareValidator {
 
@@ -18,9 +18,10 @@ public class AmministrareValidator {
         
     }
 
-    public void validateAdmin(Admin admin) {
+    public void validateAdmin(Utente admin) {
         if (admin == null) {
             throw new IllegalArgumentException("L'admin non può essere nullo.");
         }
-       
+    }
+    
 }

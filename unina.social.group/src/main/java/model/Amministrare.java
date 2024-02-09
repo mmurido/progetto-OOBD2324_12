@@ -1,4 +1,4 @@
-package unina.social.group;
+package model;
 import java.util.Objects;
 
 public class Amministrare {
@@ -48,4 +48,8 @@ public class Amministrare {
     public int hashCode() {
         return Objects.hash(gruppo, admin);
     }
+
+	public Utente getAdmin() {
+		return admin;
+	}
 }

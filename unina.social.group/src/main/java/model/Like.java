@@ -1,4 +1,4 @@
-package unina.social.group;
+package model;
 
 public class Like {
     private Post post;

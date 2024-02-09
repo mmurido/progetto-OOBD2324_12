@@ -1,4 +1,4 @@
-package unina.social.group;
+package model;
 
 import java.time.LocalDateTime;
 import java.util.List;
