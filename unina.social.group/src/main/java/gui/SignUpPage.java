@@ -6,11 +6,13 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
@@ -24,7 +26,7 @@ public class SignUpPage {
         Pane centerPane = new Pane();
 
         // Creazione della scritta SIGNUP sopra il GridPane
-        javafx.scene.control.Label signUpLabel = new javafx.scene.control.Label("SIGNUP");
+        Label signUpLabel = new Label("SIGNUP");
         signUpLabel.setFont(Font.font("Product Sans", 40)); // Imposta il font in stampatello
         signUpLabel.setStyle("-fx-text-fill: #18344a;"); // Imposta il colore del testo
         signUpLabel.setLayoutX(90);
@@ -66,9 +68,17 @@ public class SignUpPage {
         usernameField.setLayoutX(80);
         usernameField.setLayoutY(310);
 
+        // Creazione dell'etichetta per il messaggio di registrazione effettuata
+        Label successLabel = new Label("Registrazione effettuata");
+        successLabel.setTextFill(Color.GREEN); // Imposta il colore del testo a verde
+        successLabel.setFont(Font.font("Arial", 14));
+        successLabel.setLayoutX(80);
+        successLabel.setLayoutY(400);
+        successLabel.setVisible(false); // Imposta l'etichetta non visibile all'inizio
+
         // Aggiunta dei controlli al pannello
         centerPane.getChildren().addAll(signUpLabel, nameField, surnameField, emailField, passwordField,
-                confirmPasswordField, birthDatePicker, usernameField);
+                confirmPasswordField, birthDatePicker, usernameField, successLabel);
 
         // Creazione del bottone "Registrati"
         Button signUpButton = new Button("Registrati");
@@ -90,10 +100,49 @@ public class SignUpPage {
                 String birthDate = birthDatePicker.getEditor().getText(); // Ottieni la data di nascita come stringa
                 String username = usernameField.getText();
 
+                // Verifica il formato dell'email usando un'espressione regolare
+                String emailPattern = "^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+[.][A-Za-z]+$";
+                if (!email.matches(emailPattern)) {
+                    // Se l'email non corrisponde al pattern, mostra un messaggio di errore
+                    emailField.setText("");
+                    emailField.setPromptText("Email non valida");
+                    emailField.setStyle("-fx-text-inner-color: red;");
+                    return; // Esci dal metodo senza proseguire con la registrazione
+                }
+
+                // Rimetti il colore del testo a normale se l'email è nel formato corretto
+                emailField.setStyle("-fx-text-inner-color: black;");
+
+                // Verifica se la conferma della password corrisponde alla password
+                if (!password.equals(confirmPassword)) {
+                    // Se non corrispondono, mostra un messaggio di errore e cambia il colore del testo
+                    confirmPasswordField.setText("");
+                    confirmPasswordField.setPromptText("Le password non corrispondono");
+                    confirmPasswordField.setStyle("-fx-text-inner-color: red;");
+                    return; // Esci dal metodo senza proseguire con la registrazione
+                }
+
+                // Rimetti il colore del testo a normale se le password corrispondono
+                confirmPasswordField.setStyle("-fx-text-inner-color: black;");
+
+                // Verifica il formato dell'username usando un'espressione regolare
+                String usernamePattern = "^[A-Za-z0-9_]{4,15}$";
+                if (!username.matches(usernamePattern)) {
+                    // Se l'username non corrisponde al pattern, mostra un messaggio di errore
+                    usernameField.setText("");
+                    usernameField.setPromptText("Formato username non valido");
+                    usernameField.setStyle("-fx-text-inner-color: red;");
+                    return; // Esci dal metodo senza proseguire con la registrazione
+                }
+
+                // Rimetti il colore del testo a normale se l'username è nel formato corretto
+                usernameField.setStyle("-fx-text-inner-color: black;");
+
                 // Inserisci qui la logica per la registrazione
                 // Puoi eseguire la validazione dei campi qui e gestire la registrazione
 
                 // Ad esempio, mostriamo un messaggio di registrazione avvenuta con successo
+                successLabel.setVisible(true);
                 System.out.println("Registrazione completata:");
                 System.out.println("Nome: " + name);
                 System.out.println("Cognome: " + surname);
@@ -137,4 +186,3 @@ public class SignUpPage {
         return scene;
     }
 }
-
