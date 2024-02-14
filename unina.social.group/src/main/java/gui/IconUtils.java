@@ -19,6 +19,8 @@ public class IconUtils {
 	public Image logo = new Image(getClass().getResourceAsStream("logo.png"));
 	public Image maximizeButtonIcon = new Image(getClass().getResourceAsStream("c.png"));
 	public Image profilePicture = new Image(getClass().getResourceAsStream("pfp.png"));
+	public Image searchBarIcon = new Image(getClass().getResourceAsStream("searchBarIcon.png"));
+
 
 	
 	public void setIcon(ButtonBase button, ImageView icon) {

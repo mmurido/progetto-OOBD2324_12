@@ -1,13 +1,16 @@
 package gui.homepage;
 
 import gui.Navigation;
+import gui.SearchScreen;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
@@ -75,13 +78,20 @@ public class Homepage {
 		expandedSidebar = homepageExpandedSidebarBuilder.createExpandedSidebar();
 		
 		//SET UP HOW TO SWITCH BETWEEN COLLAPSED AND EXPANDED SIDEBAR
-		(expandedSidebar.lookup("#collapseSidebarToggleButton")).setOnMouseClicked(e -> {collapseSidebar();});
 		(collapsedSidebar.lookup("#sidebarExpandButton")).setOnMouseClicked(e -> {expandSidebar();});
+		(expandedSidebar.lookup("#collapseSidebarToggleButton")).setOnMouseClicked(e -> {collapseSidebar();});
 		
 		//SET BEHAVIOR OF LOGOUT BUTTONS WHEN CLICKED
-		(expandedSidebar.lookup("#expandedSidebarLogoutButton")).setOnMouseClicked(e -> {navigation.goBackToLoginScreen(primaryStage);});
 		(collapsedSidebar.lookup("#collapsedSidebarLogoutButton")).setOnMouseClicked(e -> {navigation.goBackToLoginScreen(primaryStage);});
+		(expandedSidebar.lookup("#expandedSidebarLogoutButton")).setOnMouseClicked(e -> {navigation.goBackToLoginScreen(primaryStage);});
 
+		//SET BEHAVIOR OF SEARCH BUTTON WHEN CLICKED
+		(collapsedSidebar.lookup("#collapsedSidebarSearchButton")).setOnMouseClicked(e -> {
+			SearchScreen searchScreen = new SearchScreen();
+			contentPane.getChildren().add(searchScreen.a());
+		});
+
+		
 		this.makeWindowMovable();
 		
 		bindCollapsedAndExpandedSidebarButtons();
