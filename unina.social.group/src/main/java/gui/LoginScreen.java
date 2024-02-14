@@ -3,8 +3,10 @@ package gui;
 import java.sql.SQLException;
 
 import DAO.UtenteDAO;
+import gui.homepage.Homepage;
 import javafx.animation.FadeTransition;
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -14,6 +16,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -22,12 +27,14 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
+import model.Utente;
 
-public class MainScreen extends Application {
+public class LoginScreen extends Application {
 
 	private Stage primaryStage;
 	private StackPane pane;
 	private UtenteDAO utenteDAO;
+	private UserSession userSession;
 	
     private double xOffset = 0;
     private double yOffset = 0;
@@ -44,11 +51,23 @@ public class MainScreen extends Application {
     	this.primaryStage = primaryStage;
     	primaryStage.centerOnScreen();
     	primaryStage.initStyle(StageStyle.TRANSPARENT);
-
-    	StackPane root = guiHelper.createTemplatePane(250, 370);
+    	
+    	
+    	StackPane shadowPane = new StackPane();
+		shadowPane.setStyle("-fx-background-color: transparent;");
+		shadowPane.setPrefSize(500, 500);
+		
+		StackPane root = guiHelper.createTemplatePane(250, 370);
     	this.pane = root;
+        
+        shadowPane.setAlignment(root, javafx.geometry.Pos.CENTER);
+        StackPane.setMargin(root, new javafx.geometry.Insets(10,10,10,10));
+        shadowPane.getChildren().add(root);
+        
 
-        Scene scene = new Scene(root);
+    	
+
+        Scene scene = new Scene(shadowPane);
         scene.setFill(Color.TRANSPARENT);
         
         Button closeButton = guiHelper.createCloseButton();
@@ -138,7 +157,8 @@ public class MainScreen extends Application {
         iconView.setSmooth(true);
         toggleButton.setTranslateY(15);
         toggleButton.setTranslateX(85);
-                
+        iconView.setFitHeight(20);
+        iconView.setFitWidth(20);
         toggleButton.setGraphic(iconView);        
         toggleButton.setPrefSize(25, 25);
         
@@ -148,6 +168,9 @@ public class MainScreen extends Application {
         iconView2.setSmooth(true);
         toggleButton.setTranslateY(15);
         toggleButton.setTranslateX(85);
+        iconView2.setFitHeight(20);
+        iconView2.setFitWidth(20);
+     
         
         toggleButton.setOnAction(e -> {
         	if(toggleButton.isSelected()) {
@@ -193,6 +216,7 @@ public class MainScreen extends Application {
         warning.setStyle("-fx-background-color: b61f1f; -fx-alignment: CENTER_LEFT; -fx-min-width: 0px; -fx-min-height: 0px; -fx-text-fill: white;");
         warning.setVisible(false);
         loginButton.setOnAction(e -> {
+
         	Homepage homepage = new Homepage();
         	Scene nextScene;
         	nextScene = homepage.getScene(primaryStage);
@@ -200,6 +224,8 @@ public class MainScreen extends Application {
 			primaryStage.centerOnScreen();
 			primaryStage.setResizable(true);
 
+			
+			
 //            String username = usernameTextField.getText();
 //            String password = passwordTextField.getText();
 //           
@@ -208,7 +234,9 @@ public class MainScreen extends Application {
 //			} catch (SQLException e1) {
 //				e1.printStackTrace();
 //			}
+//            
 //            boolean credentialsAreCorrect = utenteDAO.checkIfCredentialsAreCorrect(username, password);
+//            
 //            System.out.println(credentialsAreCorrect);
 //            if (!credentialsAreCorrect) {
 //            	warning.setVisible(true);
@@ -217,17 +245,41 @@ public class MainScreen extends Application {
 //            }
 //            else
 //            {
+//            	try {
+//					Utente loggedUser = utenteDAO.getByUsername(username);
+//	            	userSession.setLoggedUser(loggedUser);
+//				} catch (Exception e1) {
+//					// TODO Auto-generated catch block
+//					e1.printStackTrace();
+//				}
+//            	
+//            	
 //                Homepage homepage = new Homepage();
 //                Scene nextScene;
 //    			try {
 //    				nextScene = homepage.getScene(primaryStage);
 //    				primaryStage.setScene(nextScene);
+//					primaryStage.centerOnScreen();
+//					primaryStage.setResizable(true);
 //    				primaryStage.show();
 //    			} catch (Exception exception) {
 //    				exception.printStackTrace();
 //    			}
 //            }
-         });       
+         }); 
+        
+        
+        //NON COMPLETOOO
+        passwordTextField.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+            	Homepage homepage = new Homepage();
+            	Scene nextScene;
+            	nextScene = homepage.getScene(primaryStage);
+    			primaryStage.setScene(nextScene);
+    			primaryStage.centerOnScreen();
+    			primaryStage.setResizable(true);
+            }
+        });
         
         
 
