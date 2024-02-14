@@ -88,7 +88,8 @@ public class Homepage {
 		//SET BEHAVIOR OF SEARCH BUTTON WHEN CLICKED
 		(collapsedSidebar.lookup("#collapsedSidebarSearchButton")).setOnMouseClicked(e -> {
 			SearchScreen searchScreen = new SearchScreen();
-			contentPane.getChildren().add(searchScreen.a());
+			AnchorPane p = searchScreen.a();
+			contentPane.getChildren().add(p);
 		});
 
 		
