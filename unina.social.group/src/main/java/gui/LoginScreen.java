@@ -34,7 +34,6 @@ public class LoginScreen extends Application {
 	private Stage primaryStage;
 	private StackPane pane;
 	private UtenteDAO utenteDAO;
-	private UserSession userSession;
 	
     private double xOffset = 0;
     private double yOffset = 0;

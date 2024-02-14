@@ -47,7 +47,7 @@ public class GUIHelper {
         pane.setStyle("-fx-background-color: white; " +
         			  "-fx-background-radius: 5;" +
         			  "-fx-effect: dropshadow(gaussian, black, 5, 0, 3, 3);");
-        pane.setMinSize(width, height);
+        pane.setMaxSize(width, height);
         pane.setAlignment(Pos.CENTER);
         pane.setPadding(new Insets(2));
         return pane;		

@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 
 public class SignUpPage {
     
-    public Scene getScene() throws Exception {
+    public Scene getScene(Stage primaryStage) throws Exception {
         StackPane root = new StackPane();
         root.setStyle("-fx-background-color: white; " +
         			  "-fx-background-radius: 5;" +
