@@ -269,5 +269,38 @@ public class UtenteDAO{
     	
     	return u;
     }
+    
+    
+    
+    public boolean checkIfCredentialsAreCorrect(String username, String password) {
+    	
+    	if (connection == null) {
+    		return false;
+    	}
+
+		try
+		{
+			String cmd = "SELECT * FROM Utente WHERE username = ? AND password=?";
+			
+			PreparedStatement pstmt = connection.prepareStatement(cmd);
+			pstmt.setString(1, username);
+			pstmt.setString(2, password);
+			ResultSet rs = pstmt.executeQuery();
+			
+			if (!rs.next()) {
+				System.out.println("Non esiste alcun utente con queste credenziali.\n");
+				dbConnector.closeResources(pstmt, rs, connection);
+				return false;
+			}
+
+			dbConnector.closeResources(pstmt, rs, connection);
+		}
+		catch (SQLException e) 
+		{
+			System.out.println("Non è stato possibile ottenere i dati dell'utente\n" + e);
+		}
+		
+		return true;
+    }
 
 }

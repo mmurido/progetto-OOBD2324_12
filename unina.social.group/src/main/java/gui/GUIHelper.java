@@ -24,8 +24,8 @@ public class GUIHelper {
         					 "-fx-min-height: 0px;");
         StackPane.setAlignment(closeButton, Pos.TOP_RIGHT);        
         closeButton.setOnAction(e -> {stage.close();});
-        closeButton.setOnMouseEntered(e -> closeButton.setStyle("-fx-background-color: #df0404; -fx-alignment: CENTER; -fx-min-width: 0px; -fx-min-height: 0px; -fx-text-fill: white;"));
-        closeButton.setOnMouseExited(e -> closeButton.setStyle("-fx-background-color: transparent; -fx-alignment: CENTER; -fx-min-width: 0px; -fx-min-height: 0px;"));
+        closeButton.setOnMouseEntered(e -> closeButton.setStyle("-fx-background-color: #df0404; -fx-alignment: CENTER; -fx-text-fill: white;"));
+        closeButton.setOnMouseExited(e -> closeButton.setStyle("-fx-background-color: transparent; -fx-alignment: CENTER;"));
 	
         return closeButton;
 	}
@@ -36,8 +36,8 @@ public class GUIHelper {
         minimizeButton.setStyle("-fx-background-color: transparent;");
         StackPane.setAlignment(minimizeButton, Pos.TOP_RIGHT);
         StackPane.setMargin(minimizeButton, new Insets(0, 25, 0, 0));
-        minimizeButton.setOnMouseEntered(e -> minimizeButton.setStyle("-fx-background-color: #eeeeee; -fx-alignment: CENTER; -fx-min-width: 0px; -fx-min-height: 0px;"));
-        minimizeButton.setOnMouseExited(e -> minimizeButton.setStyle("-fx-background-color: transparent; -fx-alignment: CENTER; -fx-min-width: 0px; -fx-min-height: 0px;"));
+        minimizeButton.setOnMouseEntered(e -> minimizeButton.setStyle("-fx-background-color: #eeeeee; -fx-alignment: CENTER;"));
+        minimizeButton.setOnMouseExited(e -> minimizeButton.setStyle("-fx-background-color: transparent; -fx-alignment: CENTER;"));
         minimizeButton.setOnAction(e -> {stage.setIconified(true);});
         return minimizeButton;
 	}
@@ -46,10 +46,14 @@ public class GUIHelper {
         StackPane pane = new StackPane();
         pane.setStyle("-fx-background-color: white; " +
         			  "-fx-background-radius: 5;" +
-        			  "-fx-effect: dropshadow(gaussian, black, 5, 0, 3, 3);");
-        pane.setMinSize(width, height);
+        			  "-fx-effect: dropshadow(gaussian, black, 5, 0, 3, 3);"
+        );
+
+        pane.setMaxSize(width, height);
         pane.setAlignment(Pos.CENTER);
         pane.setPadding(new Insets(2));
         return pane;		
 	}
+	
+
 }
