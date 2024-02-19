@@ -1,4 +1,4 @@
-package gui.homepage;
+package gui.mainpage;
 
 import gui.IconUtils;
 import javafx.scene.control.ToggleButton;
@@ -9,12 +9,12 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-public class HomepageCollapsedSidebarBuilder {
+public class MainPageCollapsedSidebarBuilder {
 
 	public static final String HIGHLIGHTED_STYLE = "-fx-background-color: #136472; -fx-background-radius: 10";
 	public static final String UNHIGHLIGHTED_STYLE = "-fx-background-color: #0e5460; -fx-background-radius: 10";
 
-	private HomepageSidebarButtonsUtils homepageSidebarButtonsUtils = new HomepageSidebarButtonsUtils();
+	private MainPageSidebarButtonsUtils homepageSidebarButtonsUtils = new MainPageSidebarButtonsUtils();
 	private IconUtils iconUtils = new IconUtils();
 	
 	private AnchorPane collapsedSidebar;
@@ -104,8 +104,14 @@ public class HomepageCollapsedSidebarBuilder {
 		navigationButton.setOnMouseEntered(e -> {homepageSidebarButtonsUtils.highlightButton(navigationButton);});
 		navigationButton.setOnMouseExited(e -> {homepageSidebarButtonsUtils.unhighlightButtonIfNotSelected(navigationButton);});
 		navigationButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
-			if (newValue) {navigationButton.setStyle(HIGHLIGHTED_STYLE);}
-			else {navigationButton.setStyle(UNHIGHLIGHTED_STYLE);}
+			if (newValue) {
+				navigationButton.setStyle(HIGHLIGHTED_STYLE);
+				navigationButton.setMouseTransparent(true);
+			}
+			else {
+				navigationButton.setStyle(UNHIGHLIGHTED_STYLE);
+				navigationButton.setMouseTransparent(false);
+			}
 		});
 		
 		//SET TOGGLE GROUP

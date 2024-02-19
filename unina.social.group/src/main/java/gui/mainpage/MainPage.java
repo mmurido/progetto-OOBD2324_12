@@ -1,7 +1,8 @@
-package gui.homepage;
+package gui.mainpage;
 
+import controllers.UserSession;
 import gui.Navigation;
-import gui.SearchScreen;
+import gui.SearchPage;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -19,21 +20,28 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-public class Homepage {
+public class MainPage {
 
+	private UserSession userSession;
 	private Stage primaryStage;
 	private Scene scene;
 	private BorderPane borderPane;
 	private AnchorPane collapsedSidebar;
 	private AnchorPane expandedSidebar;
-	private AnchorPane contentPane;
+	private AnchorPane centerPane;
 	private double xOffset = 0;
 	private double yOffset = 0;
 	
+	public MainPage(UserSession userSession) {
+		this.userSession = userSession;
+		this.navigation = new Navigation(userSession);
+		this.mainPageExpandedSidebarBuilder = new MainPageExpandedSidebarBuilder(userSession);
+	}
+	
 	private WindowControls windowControls = new WindowControls();
-	private HomepageCollapsedSidebarBuilder homepageCollapsedSidebarBuilder = new HomepageCollapsedSidebarBuilder();
-	private HomepageExpandedSidebarBuilder homepageExpandedSidebarBuilder =  new HomepageExpandedSidebarBuilder();
-	private Navigation navigation = new Navigation();
+	private MainPageCollapsedSidebarBuilder mainPageCollapsedSidebarBuilder = new MainPageCollapsedSidebarBuilder();
+	private MainPageExpandedSidebarBuilder mainPageExpandedSidebarBuilder;
+	private Navigation navigation;
 	
 	public Scene getScene(Stage primaryStage) {
 		this.primaryStage = primaryStage;
@@ -41,7 +49,7 @@ public class Homepage {
 		return scene;
 	}
 
-	private Scene createHomepage() {
+	public Scene createHomepage() {
 		
 		//CREATE SHADOW PANE
 		StackPane shadowPane = new StackPane();
@@ -54,28 +62,44 @@ public class Homepage {
 		borderPane = new BorderPane();
 		borderPane.setStyle("-fx-background-color: white; " + "-fx-background-radius: 5;"
 				+ "-fx-effect: dropshadow(gaussian, gray, 10, 0, 0, 0);");
-		borderPane.setMinSize(700, 550);
+		borderPane.setMinSize(950, 550);
 		borderPane.setPadding(new Insets(4, 4, 4, 4));
 		StackPane.setAlignment(borderPane, javafx.geometry.Pos.CENTER);
 		StackPane.setMargin(borderPane, new javafx.geometry.Insets(10, 10, 10, 10));
 		shadowPane.getChildren().add(borderPane);
 
 		//ADD CONTENT PANE
-		contentPane = new AnchorPane();
-		contentPane.setStyle("-fx-background-color: white;");
-		borderPane.setCenter(contentPane);
+		centerPane = new AnchorPane();
+		centerPane.setStyle("-fx-background-color: white;");
+		borderPane.setCenter(centerPane);
 		
 		//ADD WINDOW CONTROLS
+		AnchorPane windowControlsBar = new AnchorPane();
+		windowControlsBar.setId("windowControlsBar");
+		AnchorPane.setTopAnchor(windowControlsBar, 0.0);
+		AnchorPane.setLeftAnchor(windowControlsBar, 0.0);
+		AnchorPane.setRightAnchor(windowControlsBar, 0.0);
+		
 		windowControls.setStage(primaryStage);
 		windowControls.setWindow(borderPane);
-		contentPane.getChildren().add(windowControls.setUpWindowControls());
+		windowControlsBar.getChildren().add(windowControls.setUpWindowControls());
 		
+		centerPane.getChildren().add(windowControlsBar);
+		
+		//ADD CONTENT PANE
+		AnchorPane contentPane = new AnchorPane();
+		AnchorPane.setTopAnchor(contentPane, 40.0);
+		AnchorPane.setBottomAnchor(contentPane, 0.0);
+		AnchorPane.setLeftAnchor(contentPane, 0.0);
+		AnchorPane.setRightAnchor(contentPane, 0.0);
+		centerPane.getChildren().add(contentPane);
+
 		//ADD COLLAPSED SIDEBAR
-		collapsedSidebar = homepageCollapsedSidebarBuilder.createCollapsedSidebar();
+		collapsedSidebar = mainPageCollapsedSidebarBuilder.createCollapsedSidebar();
 		borderPane.setLeft(collapsedSidebar);
 		
 		//ADD EXPANDED SIDEBAR
-		expandedSidebar = homepageExpandedSidebarBuilder.createExpandedSidebar();
+		expandedSidebar = mainPageExpandedSidebarBuilder.createExpandedSidebar();
 		
 		//SET UP HOW TO SWITCH BETWEEN COLLAPSED AND EXPANDED SIDEBAR
 		(collapsedSidebar.lookup("#sidebarExpandButton")).setOnMouseClicked(e -> {expandSidebar();});
@@ -86,11 +110,33 @@ public class Homepage {
 		(expandedSidebar.lookup("#expandedSidebarLogoutButton")).setOnMouseClicked(e -> {navigation.goBackToLoginScreen(primaryStage);});
 
 		//SET BEHAVIOR OF SEARCH BUTTON WHEN CLICKED
-		(collapsedSidebar.lookup("#collapsedSidebarSearchButton")).setOnMouseClicked(e -> {
-			SearchScreen searchScreen = new SearchScreen();
-			AnchorPane p = searchScreen.a();
-			contentPane.getChildren().add(p);
+		(collapsedSidebar.lookup("#collapsedSidebarSearchButton")).setOnMouseClicked(event -> {
+			try {
+				navigation.goToSearchPage(contentPane);
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
 		});
+		
+		//SET BEHAVIOR OF HOME BUTTON WHEN CLICKED
+		(collapsedSidebar.lookup("#collapsedSidebarHomeButton")).setOnMouseClicked(event -> {
+			try {
+				navigation.goToHomepage(contentPane);
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+		});
+		
+		//RESIZE
+        borderPane.setOnMousePressed(event -> {
+            xOffset = event.getSceneX();
+            yOffset = event.getSceneY();
+        });
+
+        borderPane.setOnMouseDragged(event -> {
+            primaryStage.setX(event.getScreenX() - xOffset);
+            primaryStage.setY(event.getScreenY() - yOffset);
+        });
 
 		
 		this.makeWindowMovable();
@@ -153,42 +199,44 @@ public class Homepage {
 	}
 	
 	private void bindCollapsedAndExpandedSidebarButtons() {
-		((ToggleButton) collapsedSidebar.lookup("#collapsedSidebarHomeButton")).selectedProperty().bindBidirectional(
-				((ToggleButton) expandedSidebar.lookup("#expandedSidebarHomeButton")).selectedProperty());
-		((ToggleButton) collapsedSidebar.lookup("#collapsedSidebarSearchButton")).selectedProperty().bindBidirectional(
-				((ToggleButton) expandedSidebar.lookup("#expandedSidebarSearchButton")).selectedProperty());
-		((ToggleButton) collapsedSidebar.lookup("#collapsedSidebarMessageButton")).selectedProperty().bindBidirectional(
-				((ToggleButton) expandedSidebar.lookup("#expandedSidebarMessageButton")).selectedProperty());
+		((ToggleButton) collapsedSidebar.lookup("#collapsedSidebarHomeButton")).selectedProperty()
+			.bindBidirectional(((ToggleButton) expandedSidebar.lookup("#expandedSidebarHomeButton")).selectedProperty());
+		
+		((ToggleButton) collapsedSidebar.lookup("#collapsedSidebarSearchButton")).selectedProperty()
+			.bindBidirectional(((ToggleButton) expandedSidebar.lookup("#expandedSidebarSearchButton")).selectedProperty());
+		
+		((ToggleButton) collapsedSidebar.lookup("#collapsedSidebarMessageButton")).selectedProperty()
+			.bindBidirectional(((ToggleButton) expandedSidebar.lookup("#expandedSidebarMessageButton")).selectedProperty());
+		
 		((ToggleButton) collapsedSidebar.lookup("#collapsedSidebarNotificationButton")).selectedProperty()
-				.bindBidirectional(((ToggleButton) expandedSidebar.lookup("#expandedSidebarNotificationButton"))
-						.selectedProperty());
+			.bindBidirectional(((ToggleButton) expandedSidebar.lookup("#expandedSidebarNotificationButton")).selectedProperty());
+		
 		((ToggleButton) collapsedSidebar.lookup("#collapsedSidebarAnalyticsButton")).selectedProperty()
-				.bindBidirectional(
-						((ToggleButton) expandedSidebar.lookup("#expandedSidebarAnalyticsButton")).selectedProperty());
+				.bindBidirectional(((ToggleButton) expandedSidebar.lookup("#expandedSidebarAnalyticsButton")).selectedProperty());
+		
 		((ToggleButton) collapsedSidebar.lookup("#collapsedSidebarSettingsButton")).selectedProperty()
-				.bindBidirectional(
-						((ToggleButton) expandedSidebar.lookup("#expandedSidebarSettingsButton")).selectedProperty());
+				.bindBidirectional(((ToggleButton) expandedSidebar.lookup("#expandedSidebarSettingsButton")).selectedProperty());
 	}
 	
-	private void makeWindowMovable() {
-		// Handle mouse pressed event to start dragging
-		borderPane.setOnMousePressed(event -> {
+	private void makeWindowMovable() {		
+		borderPane.lookup("#windowControlsBar").setOnMousePressed(event -> {
 			xOffset = event.getSceneX();
 			yOffset = event.getSceneY();
 		});
 
-		// Handle mouse dragged event to move the stage
-		borderPane.setOnMouseDragged(event -> {
+		borderPane.lookup("#windowControlsBar").setOnMouseDragged(event -> {
 			primaryStage.setX(event.getScreenX() - xOffset);
 			primaryStage.setY(event.getScreenY() - yOffset);
 		});
 
-		contentPane.setOnMouseClicked(e -> {
+		centerPane.setOnMouseClicked(e -> {
 			if (expandedSidebar.isVisible()) {
 				collapseSidebar();
 			}
 		});
 	}
+	
+
 	
 
 }

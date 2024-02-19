@@ -1,4 +1,4 @@
-package gui.homepage;
+package gui.mainpage;
 
 import gui.IconUtils;
 import javafx.geometry.Insets;
@@ -31,6 +31,7 @@ public class WindowControls {
 	
 	public HBox setUpWindowControls() {
 		windowControls = new HBox();
+		windowControls.setId("windowControls");
 		AnchorPane.setTopAnchor(windowControls, 1.0);
 		AnchorPane.setRightAnchor(windowControls, 1.0);
 
@@ -96,7 +97,6 @@ public class WindowControls {
 
 	private void addCloseButton() {
 		Button closeButton = new Button("✕");
-		closeButton.setFont(new Font("Comfortaa", 12));
 		closeButton.setStyle("-fx-background-color: transparent;" + "-fx-font-family: 'Comfortaa';"
 				+ "-fx-font-size: 12;" + "-fx-fill: black;" + "-fx-alignment: CENTER;");
 
