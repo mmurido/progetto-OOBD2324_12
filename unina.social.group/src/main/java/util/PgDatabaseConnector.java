@@ -13,41 +13,43 @@ public class PgDatabaseConnector {
         config.setJdbcUrl("jdbc:postgresql://localhost:5432/UninaSocialGroupDB");
         config.setUsername("postgres");
         config.setPassword("!Teresa!002!");
-        config.setMaximumPoolSize(5);
+        config.setMinimumIdle(2);
+        config.setMaximumPoolSize(10);
+        config.setConnectionTimeout(5000); 
+        config.setIdleTimeout(300000); 
+        config.setMaxLifetime(1800000);
+        config.setLeakDetectionThreshold(60 * 1000); 
+
         dataSource = new HikariDataSource(config);
     }
 
     public static Connection getConnection() throws SQLException {
-    	try 
-    	{
+    	try {
             return dataSource.getConnection();
-    	} 
-    	catch(SQLException e) 
-    	{
-    		System.out.println("Connessione alla base di dati fallita." + e);
+    	} catch(SQLException e) {
+    		e.printStackTrace();;
         	return null;
     	}
     }
     
-    public void closeResources(Statement stmt, ResultSet rs, Connection con) {
-    	try 
-    	{
-    		if (stmt != null && !stmt.isClosed()) {
-    			stmt.close();
-    		}
-    		
-    		if (rs != null && !rs.isClosed()) {
-    			rs.close();
-    		}
-    		
-    		if (con != null && !con.isClosed()) {
-    			con.close();
-    		}
-    	} 
-    	catch (SQLException e) 
-    	{
-    		System.out.println(e);
-    	}
+    public void closeResources(ResultSet rs, Statement stmt, Connection connection) {
+        try {
+            if (rs != null) {
+                rs.close();
+            }
+
+            if (stmt != null) {
+                stmt.close();
+            }
+
+            if (connection != null && !connection.isClosed()) {
+                connection.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
+    
+    
 
 }

@@ -1,11 +1,11 @@
-package gui.homepage;
+package gui.mainpage;
 
 import gui.IconUtils;
 import javafx.scene.control.ButtonBase;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.ImageView;
 
-public class HomepageSidebarButtonsUtils {
+public class MainPageSidebarButtonsUtils {
 
 	public static final String HIGHLIGHTED_STYLE = "-fx-background-color: #136472; -fx-background-radius: 10";
 	public static final String UNHIGHLIGHTED_STYLE = "-fx-background-color: #0e5460; -fx-background-radius: 10";

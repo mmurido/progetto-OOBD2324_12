@@ -25,6 +25,17 @@ public class Gruppo {
 		this.tema = tema;
 		this.owner = owner;
 	}
+	
+	public Gruppo(String idGruppo, String nome, LocalDateTime dataOraCreazione, String descrizione, Tema tema, Utente owner) {
+		validator.validateAllValues(nome, dataOraCreazione, descrizione, tema, owner);
+		
+		this.idGruppo = idGruppo;
+		this.nome = nome;
+		this.dataOraCreazione = dataOraCreazione;
+		this.descrizione = descrizione;
+		this.tema = tema;
+		this.owner = owner;
+	}
 
 	public String getIdGruppo() {
 		return idGruppo;

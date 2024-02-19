@@ -1,5 +1,6 @@
-package gui.homepage;
+package gui.mainpage;
 
+import controllers.UserSession;
 import gui.IconUtils;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
@@ -13,14 +14,15 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
-public class HomepageExpandedSidebarBuilder {
+public class MainPageExpandedSidebarBuilder {
 	
 	public static final String HIGHLIGHTED_STYLE = "-fx-background-color: #136472; -fx-background-radius: 10";
 	public static final String UNHIGHLIGHTED_STYLE = "-fx-background-color: #0e5460; -fx-background-radius: 10";
 
 	private IconUtils iconUtils = new IconUtils();
-	private HomepageSidebarButtonsUtils homepageSidebarButtonsUtils = new HomepageSidebarButtonsUtils();
+	private MainPageSidebarButtonsUtils homepageSidebarButtonsUtils = new MainPageSidebarButtonsUtils();
 
+	private UserSession userSession;
 	private AnchorPane expandedSidebar;	
 	private VBox expandedSidebarNavigationButtons;
 	private VBox navigationButtonsLabels;
@@ -28,6 +30,10 @@ public class HomepageExpandedSidebarBuilder {
 	private HBox expandedSidebarBottomSection;
 	private HBox userProfileBox;
 	private VBox userInfoBox;
+	
+	public MainPageExpandedSidebarBuilder(UserSession userSession) {
+		this.userSession = userSession;
+	}
 	
 	public AnchorPane createExpandedSidebar() {
 		//CREATE EXPANDED SIDEBAR
@@ -132,7 +138,7 @@ public class HomepageExpandedSidebarBuilder {
 		userProfileBox = new HBox();
 		expandedSidebarBottomSection.getChildren().add(userProfileBox);
 
-		userProfileBox.setStyle(HomepageSidebarButtonsUtils.HIGHLIGHTED_STYLE);
+		userProfileBox.setStyle(MainPageSidebarButtonsUtils.HIGHLIGHTED_STYLE);
 		userProfileBox.setPrefSize(173, 45);
 		userProfileBox.setPadding(new Insets(5, 8, 4, 10));
 		userProfileBox.setSpacing(8);
@@ -154,11 +160,11 @@ public class HomepageExpandedSidebarBuilder {
 		userInfoBox = new VBox();
 		userInfoBox.setPadding(new Insets(3, 0, 0, 0));
 
-		Text firstAndLastName = new Text("Teresa Pia De Santis");
+		Text firstAndLastName = new Text(userSession.getLoggedUser().getNome() + " " + userSession.getLoggedUser().getCognome());
 		firstAndLastName.setStyle("-fx-font-family: 'Product Sans'; -fx-font-size: 12; -fx-fill: white; -fx-font-weight: bold;");
 		userInfoBox.getChildren().add(firstAndLastName);
 
-		Text username = new Text("muridomuridoooo");
+		Text username = new Text(userSession.getLoggedUser().getUsername());
 		username.setStyle("-fx-font-family: 'Product Sans'; -fx-font-size: 12; -fx-fill: white;");
 		userInfoBox.getChildren().add(username);
 
@@ -203,8 +209,14 @@ public class HomepageExpandedSidebarBuilder {
 		navigationButton.setOnMouseEntered(e -> {homepageSidebarButtonsUtils.highlightButton(navigationButton);});
 		navigationButton.setOnMouseExited(e -> {homepageSidebarButtonsUtils.unhighlightButtonIfNotSelected(navigationButton);});
 		navigationButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
-			if (newValue) {navigationButton.setStyle(HIGHLIGHTED_STYLE);}
-			else {navigationButton.setStyle(UNHIGHLIGHTED_STYLE);}
+			if (newValue) {
+				navigationButton.setStyle(HIGHLIGHTED_STYLE);
+				navigationButton.setMouseTransparent(true);
+			}
+			else {
+				navigationButton.setStyle(UNHIGHLIGHTED_STYLE);
+				navigationButton.setMouseTransparent(false);			
+			}
 		});
 	}
 

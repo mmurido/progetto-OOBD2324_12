@@ -8,6 +8,8 @@ import javafx.util.Duration;
 
 public class IconUtils {
 
+	public Image closedEye = new Image(getClass().getResourceAsStream("a.png"));
+	public Image openEye = new Image(getClass().getResourceAsStream("b.png"));
 	public Image homeIcon = new Image(getClass().getResourceAsStream("homeIcon.png"));
 	public Image searchIcon = new Image(getClass().getResourceAsStream("searchIcon.png"));
 	public Image notificationIcon = new Image(getClass().getResourceAsStream("notificationIcon.png"));
@@ -20,8 +22,9 @@ public class IconUtils {
 	public Image maximizeButtonIcon = new Image(getClass().getResourceAsStream("c.png"));
 	public Image profilePicture = new Image(getClass().getResourceAsStream("pfp.png"));
 	public Image searchBarIcon = new Image(getClass().getResourceAsStream("searchBarIcon.png"));
-
-
+	public Image sortAZ = new Image(getClass().getResourceAsStream("sortAZ.png"));
+	public Image sortZA = new Image(getClass().getResourceAsStream("sortZA.png"));
+	public Image crown = new Image(getClass().getResourceAsStream("crown.png"));
 	
 	public void setIcon(ButtonBase button, ImageView icon) {
 		double iconWidth = 18;

@@ -3,22 +3,15 @@ package gui;
 import java.sql.SQLException;
 
 import DAO.UtenteDAO;
-import gui.homepage.Homepage;
-import javafx.animation.FadeTransition;
+import controllers.UserSession;
 import javafx.application.Application;
-import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -26,7 +19,6 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javafx.util.Duration;
 import model.Utente;
 
 public class LoginScreen extends Application {
@@ -34,6 +26,14 @@ public class LoginScreen extends Application {
 	private Stage primaryStage;
 	private StackPane pane;
 	private UtenteDAO utenteDAO;
+	private UserSession userSession;
+	private Navigation navigation;
+	private IconUtils iconUtils;
+	
+	public LoginScreen() {
+		this.userSession = new UserSession();
+		this.iconUtils = new IconUtils();
+	}
 	
     private double xOffset = 0;
     private double yOffset = 0;
@@ -59,7 +59,7 @@ public class LoginScreen extends Application {
 		StackPane root = guiHelper.createTemplatePane(250, 370);
     	this.pane = root;
         
-        shadowPane.setAlignment(root, javafx.geometry.Pos.CENTER);
+        StackPane.setAlignment(root, javafx.geometry.Pos.CENTER);
         StackPane.setMargin(root, new javafx.geometry.Insets(10,10,10,10));
         shadowPane.getChildren().add(root);
         
@@ -149,10 +149,8 @@ public class LoginScreen extends Application {
         
         ToggleButton toggleButton = new ToggleButton();
         toggleButton.setStyle("-fx-background-color: transparent");
-        
-        Image iconImage = new Image(getClass().getResourceAsStream("a.png"));
 
-        ImageView iconView = new ImageView(iconImage);
+        ImageView iconView = new ImageView(iconUtils.closedEye);
         iconView.setSmooth(true);
         toggleButton.setTranslateY(15);
         toggleButton.setTranslateX(85);
@@ -161,9 +159,7 @@ public class LoginScreen extends Application {
         toggleButton.setGraphic(iconView);        
         toggleButton.setPrefSize(25, 25);
         
-        Image iconImage2 = new Image(getClass().getResourceAsStream("b.png"));
-
-        ImageView iconView2 = new ImageView(iconImage2);
+        ImageView iconView2 = new ImageView(iconUtils.openEye);
         iconView2.setSmooth(true);
         toggleButton.setTranslateY(15);
         toggleButton.setTranslateX(85);
@@ -216,69 +212,65 @@ public class LoginScreen extends Application {
         warning.setVisible(false);
         loginButton.setOnAction(e -> {
 
-        	Homepage homepage = new Homepage();
-        	Scene nextScene;
-        	nextScene = homepage.getScene(primaryStage);
-			primaryStage.setScene(nextScene);
-			primaryStage.centerOnScreen();
-			primaryStage.setResizable(true);
+//        	Homepage homepage = new Homepage();
+//        	Scene nextScene;
+//        	nextScene = homepage.getScene(primaryStage);
+//			primaryStage.setScene(nextScene);
+//			primaryStage.centerOnScreen();
+//			primaryStage.setResizable(true);
 
 			
 			
-//            String username = usernameTextField.getText();
-//            String password = passwordTextField.getText();
-//           
-//            try {
-//				utenteDAO = new UtenteDAO();
-//			} catch (SQLException e1) {
-//				e1.printStackTrace();
-//			}
-//            
-//            boolean credentialsAreCorrect = utenteDAO.checkIfCredentialsAreCorrect(username, password);
-//            
-//            System.out.println(credentialsAreCorrect);
-//            if (!credentialsAreCorrect) {
-//            	warning.setVisible(true);
-//            	usernameTextField.setStyle("-fx-border-color: #b61f1f; -fx-faint-focus-color: rgba(182, 31, 31, 0.3); -fx-border-radius: 2;");
-//            	passwordTextField.setStyle("-fx-border-color: #b61f1f; -fx-faint-focus-color: rgba(182, 31, 31, 0.3); -fx-border-radius: 2;");
-//            }
-//            else
-//            {
-//            	try {
-//					Utente loggedUser = utenteDAO.getByUsername(username);
-//	            	userSession.setLoggedUser(loggedUser);
-//				} catch (Exception e1) {
-//					// TODO Auto-generated catch block
-//					e1.printStackTrace();
-//				}
-//            	
-//            	
-//                Homepage homepage = new Homepage();
-//                Scene nextScene;
-//    			try {
-//    				nextScene = homepage.getScene(primaryStage);
-//    				primaryStage.setScene(nextScene);
-//					primaryStage.centerOnScreen();
-//					primaryStage.setResizable(true);
-//    				primaryStage.show();
-//    			} catch (Exception exception) {
-//    				exception.printStackTrace();
-//    			}
-//            }
+            String username = usernameTextField.getText();
+            String password = passwordTextField.getText();
+           
+            try {
+				utenteDAO = new UtenteDAO();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+            
+            boolean credentialsAreCorrect = false;
+			try {
+				credentialsAreCorrect = utenteDAO.areCredentialsCorrect(username, password);
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+            
+            System.out.println(credentialsAreCorrect);
+            if (!credentialsAreCorrect) {
+            	warning.setVisible(true);
+            	usernameTextField.setStyle("-fx-border-color: #b61f1f; -fx-faint-focus-color: rgba(182, 31, 31, 0.3); -fx-border-radius: 2;");
+            	passwordTextField.setStyle("-fx-border-color: #b61f1f; -fx-faint-focus-color: rgba(182, 31, 31, 0.3); -fx-border-radius: 2;");
+            }
+            else
+            {
+            	try {
+					Utente loggedUser = utenteDAO.getByUsername(username);
+	            	userSession.setLoggedUser(loggedUser);
+	            	navigation = new Navigation(userSession);
+	            	navigation.goToMainPage(primaryStage);
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+            }
          }); 
         
         
-        //NON COMPLETOOO
-        passwordTextField.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
-            if (event.getCode() == KeyCode.ENTER) {
-            	Homepage homepage = new Homepage();
-            	Scene nextScene;
-            	nextScene = homepage.getScene(primaryStage);
-    			primaryStage.setScene(nextScene);
-    			primaryStage.centerOnScreen();
-    			primaryStage.setResizable(true);
-            }
-        });
+//        //NON COMPLETOOO
+//        passwordTextField.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
+//            if (event.getCode() == KeyCode.ENTER) {
+//            	Homepage homepage = new Homepage();
+//            	Scene nextScene;
+//            	nextScene = homepage.getScene(primaryStage);
+//    			primaryStage.setScene(nextScene);
+//    			primaryStage.centerOnScreen();
+//    			primaryStage.setResizable(true);
+//            }
+//        });
         
         
 
@@ -337,14 +329,14 @@ public class LoginScreen extends Application {
         });
     }
     
-    private TextField createPasswordTextField() {
-        TextField passwordTextField = new TextField();
-        passwordTextField.setStyle("-fx-focus-color: #faa905; -fx-faint-focus-color: rgba(246, 200, 107, 0.3);");
-        passwordTextField.setMaxWidth(205);
-        passwordTextField.setTranslateY(15);
-        this.setTextFieldBehavior(passwordTextField);
-        return passwordTextField;
-    }
+//    private TextField createPasswordTextField() {
+//        TextField passwordTextField = new TextField();
+//        passwordTextField.setStyle("-fx-focus-color: #faa905; -fx-faint-focus-color: rgba(246, 200, 107, 0.3);");
+//        passwordTextField.setMaxWidth(205);
+//        passwordTextField.setTranslateY(15);
+//        this.setTextFieldBehavior(passwordTextField);
+//        return passwordTextField;
+//    }
     
     private Button createLoginButton() {
     	Button loginButton = new Button("LOGIN");
