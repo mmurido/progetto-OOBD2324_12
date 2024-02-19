@@ -33,6 +33,20 @@ public class Utente {
         this.tipo = tipo;
     }
     
+    public Utente(String idUtente, String email, String username, String password, String nome, String cognome, LocalDate dataNascita, LocalDate dataIscrizione, String tipo) {
+    	validator.validateAllValues(email, username, password, nome, cognome, dataNascita, dataIscrizione, tipo);
+    	
+    	this.idUtente = idUtente;
+    	this.email = email;
+        this.username = username;
+        this.password = password;
+        this.nome = nome;
+        this.cognome = cognome;
+        this.dataNascita = dataNascita;
+        this.dataIscrizione = dataIscrizione;
+        this.tipo = tipo;
+    }
+    
 
 	// Metodi getter   
     public String getIdUtente() {
