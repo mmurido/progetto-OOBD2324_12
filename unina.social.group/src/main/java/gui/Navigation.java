@@ -1,25 +1,17 @@
 package gui;
 
-<<<<<<< Updated upstream
-=======
 import gui.analyticsPage.AnalyticsPage;
 import gui.homepage.Homepage;
 import gui.loginPage.LoginPage;
-import gui.mainpage.MainPage;
+import gui.mainPage.MainPage;
 import gui.searchPage.SearchPage;
+import javafx.application.Platform;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
->>>>>>> Stashed changes
 import javafx.stage.Stage;
 
 public class Navigation {
 	
 	private static Stage primaryStage;
-
-<<<<<<< Updated upstream
-	public void goBackToLoginScreen(Stage primaryStage) {
-		LoginScreen loginScreen = new LoginScreen();
-=======
 	private static MainPage mainPage;
 	private static Homepage homepage;
 	private static SearchPage searchPage;
@@ -32,7 +24,7 @@ public class Navigation {
 
 	public static void navigateToLoginPage() {
 		LoginPage loginScreen = new LoginPage();
->>>>>>> Stashed changes
+
 		try 
 		{
 			Thread.sleep(500);
@@ -44,20 +36,19 @@ public class Navigation {
 			e.printStackTrace();
 		}
 	}
-<<<<<<< Updated upstream
-=======
-	
+
 	public static void navigateToMainPage() {
         mainPage = new MainPage(primaryStage);
         Scene scene = mainPage.scene;
         
 		primaryStage.setScene(scene);
-		primaryStage.centerOnScreen();
-		primaryStage.setResizable(true);
-		primaryStage.show();
 		primaryStage.requestFocus();
 		
-		navigateToHomepage();		
+	    Platform.runLater(() -> {
+	        primaryStage.centerOnScreen();
+	    });
+
+		navigateToHomepage();	
 	}
 	
 	public static void navigateToSearchPage() {
@@ -79,5 +70,4 @@ public class Navigation {
 		underConstructionPage = new UnderConstructionPage();
 		mainPage.innerBorderPane.setCenter(underConstructionPage);
 	}
->>>>>>> Stashed changes
 }

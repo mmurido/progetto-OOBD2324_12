@@ -1,56 +1,30 @@
-package gui.homepage;
+package gui;
 
-import gui.IconUtils;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 public class WindowControls extends HBox {
-
+	
 	public Button minimizeButton;
 	public Button maximizeButton;
 	public Button closeButton;
-	
 	private Stage stage;
 	private Pane window;
 	private double oldHeight;
 	private double oldWidth;
-<<<<<<< Updated upstream:unina.social.group/src/main/java/gui/homepage/WindowControls.java
-	
-	private IconUtils iconUtils = new IconUtils();
-	
-	public void setStage(Stage stage) {
-		this.primaryStage = stage;
-	}
-	
-	public void setWindow(Pane pane) {
-		this.window = pane;
-	}
-	
-	public HBox setUpWindowControls() {
-		windowControls = new HBox();
-		AnchorPane.setTopAnchor(windowControls, 1.0);
-		AnchorPane.setRightAnchor(windowControls, 1.0);
-
-		addMinimizeButton();
-		addMaximizeButton();
-		addCloseButton();
-=======
->>>>>>> Stashed changes:unina.social.group/src/main/java/gui/mainpage/WindowControls.java
 		
 	public WindowControls(Stage stage) {
 		this.stage = stage;
 		initializeComponents();
 		layoutComponents();
 	}
-	
+
 	public WindowControls(Stage stage, Pane window) {
 		this.stage = stage;
 		this.window = window;
@@ -73,20 +47,21 @@ public class WindowControls extends HBox {
 	private void createMinimizeButton() {
 		minimizeButton = new Button("─");
 		minimizeButton.setStyle(
-				"-fx-background-color: transparent;" + 
-				"-fx-font-family: 'Comfortaa';" +
-				"-fx-font-size: 12;" + "-fx-fill: black;");
+				"-fx-background-color: transparent; -fx-font-family: 'Comfortaa';" +
+				"-fx-font-size: 12; -fx-fill: black;"
+		);
 
 		minimizeButton.setOnMouseEntered(e -> 
-			minimizeButton.setStyle("-fx-background-color: #eeeeee; -fx-alignment: CENTER;"));
-		
+			minimizeButton.setStyle("-fx-background-color: #eeeeee; -fx-alignment: CENTER;")
+		);
+
 		minimizeButton.setOnMouseExited(e -> 
-			minimizeButton.setStyle("-fx-background-color: transparent; -fx-alignment: CENTER;"));
-		
+			minimizeButton.setStyle("-fx-background-color: transparent; -fx-alignment: CENTER;")
+		);
+
 		minimizeButton.setOnAction(e -> {
 			stage.setIconified(true);
 		});
-
 	}
 
 	private void createMaximizeButton() {
@@ -128,30 +103,26 @@ public class WindowControls extends HBox {
 		stage.centerOnScreen();
 	}
 
-<<<<<<< Updated upstream:unina.social.group/src/main/java/gui/homepage/WindowControls.java
-	private void addCloseButton() {
-		Button closeButton = new Button("✕");
-		closeButton.setFont(new Font("Comfortaa", 12));
-		closeButton.setStyle("-fx-background-color: transparent;" + "-fx-font-family: 'Comfortaa';"
-				+ "-fx-font-size: 12;" + "-fx-fill: black;" + "-fx-alignment: CENTER;");
-=======
 	private void createCloseButton() {
 		closeButton = new Button("✕");
 		closeButton.setStyle(
 				"-fx-background-color: transparent; -fx-font-family: 'Comfortaa';" +
 				"-fx-font-size: 12; -fx-fill: black; -fx-alignment: CENTER;"
 		);
->>>>>>> Stashed changes:unina.social.group/src/main/java/gui/mainpage/WindowControls.java
 
 		closeButton.setOnAction(e -> {
-			stage.close(); });
+			stage.close();
+		});
 		
-		closeButton.setOnMouseEntered(e -> 
-			closeButton.setStyle("-fx-background-color: #df0404; -fx-alignment: CENTER; -fx-text-fill: white;"));
+		closeButton.setOnMouseEntered(e ->
+			closeButton.setStyle(
+					"-fx-background-color: #df0404; -fx-alignment: CENTER; -fx-text-fill: white;")
+		);
 		
 		closeButton.setOnMouseExited(e -> 
-			closeButton.setStyle("-fx-background-color: transparent; -fx-alignment: CENTER;"));
-
+			closeButton.setStyle(
+					"-fx-background-color: transparent; -fx-alignment: CENTER;")
+		);
 	}
 
 }

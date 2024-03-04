@@ -1,10 +1,9 @@
 package gui.loginPage;
 
 import controllers.LoginPageController;
-import gui.IconUtils;
 import gui.Navigation;
 import gui.ShadowPane;
-import gui.mainpage.WindowControls;
+import gui.WindowControls;
 import javafx.application.Application;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
@@ -17,7 +16,7 @@ import javafx.stage.StageStyle;
 
 public class LoginPage extends Application {
 
-	private LoginPageController controller = new LoginPageController(this);
+	private LoginPageController controller;
 	private Stage primaryStage;
 	private Scene scene;
 	private WindowControls windowControls;
@@ -36,6 +35,7 @@ public class LoginPage extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+    	controller = new LoginPageController(this);
         shadowPane = new ShadowPane();
         initializePrimaryStage(primaryStage);
         setupBasePane();

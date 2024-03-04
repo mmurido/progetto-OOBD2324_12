@@ -26,8 +26,6 @@ public class LoginCredentialsSection extends VBox {
     		"-fx-focus-color: #faa905; -fx-faint-focus-color: rgba(246, 200, 107, 0.5);" + 
     	    "-fx-background-radius: 5; -fx-border-radius: 5; -fx-border-color: #eeeeee;";
 
-    private IconUtils iconUtils = new IconUtils();
-
     public LoginCredentialsSection() {
         initializeComponents();
         layoutComponents();

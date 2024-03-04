@@ -8,20 +8,6 @@ import javafx.util.Duration;
 
 public class IconUtils {
 
-<<<<<<< Updated upstream
-	public Image homeIcon = new Image(getClass().getResourceAsStream("homeIcon.png"));
-	public Image searchIcon = new Image(getClass().getResourceAsStream("searchIcon.png"));
-	public Image notificationIcon = new Image(getClass().getResourceAsStream("notificationIcon.png"));
-	public Image messageIcon = new Image(getClass().getResourceAsStream("messageIcon.png"));
-	public Image settingsIcon = new Image(getClass().getResourceAsStream("settingsIcon.png"));
-	public Image analyticsIcon = new Image(getClass().getResourceAsStream("analyticsIcon.png"));
-	public Image logoutIcon = new Image(getClass().getResourceAsStream("logoutIcon.png"));
-	public Image navigationIcon = new Image(getClass().getResourceAsStream("navigationIcon.png"));
-	public Image logo = new Image(getClass().getResourceAsStream("logo.png"));
-	public Image maximizeButtonIcon = new Image(getClass().getResourceAsStream("c.png"));
-	public Image profilePicture = new Image(getClass().getResourceAsStream("pfp.png"));
-
-=======
 	public static final Image maximizeButtonIcon = loadImage("/images/square.png");
 	public static final Image closedEye = loadImage("/images/closedEye.png");
 	public static final Image openedEye = loadImage("/images/openedEye.png");
@@ -50,12 +36,9 @@ public class IconUtils {
 	public static final Image solidCommentIcon = loadImage("/images/solidComment.png");
 	public static final Image underConstructionImage = loadImage("/images/underConstruction.png");
 
-
-
     private static Image loadImage(String filename) {
         return new Image(IconUtils.class.getResourceAsStream(filename));
     }
->>>>>>> Stashed changes
 	
 	public static void setIcon(ButtonBase button, ImageView icon) {
 		double iconWidth = 18;

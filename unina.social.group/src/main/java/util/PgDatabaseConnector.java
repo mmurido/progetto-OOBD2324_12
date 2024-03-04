@@ -17,14 +17,9 @@ public class PgDatabaseConnector {
         dataSource = new HikariDataSource(config);
     }
 
-<<<<<<< Updated upstream
-    public static Connection getConnection() throws SQLException {
-    	try 
-    	{
-=======
+
     public static Connection getConnection() {
     	try {
->>>>>>> Stashed changes
             return dataSource.getConnection();
     	} 
     	catch(SQLException e) 
@@ -34,15 +29,16 @@ public class PgDatabaseConnector {
     	}
     }
     
-    public void closeResources(Statement stmt, ResultSet rs, Connection con) {
+    public void closeResources(ResultSet rs, Statement stmt, Connection con) {
     	try 
     	{
-    		if (stmt != null && !stmt.isClosed()) {
-    			stmt.close();
-    		}
     		
     		if (rs != null && !rs.isClosed()) {
     			rs.close();
+    		}
+    		
+    		if (stmt != null && !stmt.isClosed()) {
+    			stmt.close();
     		}
     		
     		if (con != null && !con.isClosed()) {

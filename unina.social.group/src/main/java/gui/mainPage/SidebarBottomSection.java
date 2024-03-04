@@ -1,4 +1,4 @@
-package gui.mainpage;
+package gui.mainPage;
 
 import controllers.UserSession;
 import gui.IconUtils;
