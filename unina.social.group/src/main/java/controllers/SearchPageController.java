@@ -2,12 +2,9 @@ package controllers;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import DAO.GruppoDAO;
-import gui.loginPage.LoginPage;
 import gui.searchPage.SearchPage;
 import javafx.scene.control.ToggleButton;
-import javafx.scene.input.KeyCode;
 import model.Gruppo;
 
 public class SearchPageController {

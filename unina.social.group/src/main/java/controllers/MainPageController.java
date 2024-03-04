@@ -1,7 +1,7 @@
 package controllers;
 
 import gui.Navigation;
-import gui.mainPage.MainPage;
+import gui.mainpage.MainPage;
 import javafx.scene.control.ToggleButton;
 
 public class MainPageController {

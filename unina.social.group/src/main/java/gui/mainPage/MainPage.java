@@ -1,4 +1,4 @@
-package gui.mainPage;
+package gui.mainpage;
 
 import controllers.MainPageController;
 import gui.ShadowPane;
@@ -165,3 +165,4 @@ public class MainPage extends BorderPane {
 		});
 	}
 }
+

@@ -1,6 +1,6 @@
 package controllers;
 
-import gui.homepage.Homepage;
+import gui.homePage.Homepage;
 import javafx.scene.control.ToggleButton;
 
 public class HomepageController {

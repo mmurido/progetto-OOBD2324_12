@@ -1,4 +1,4 @@
-package gui.mainPage;
+package gui.mainpage;
 
 import gui.IconUtils;
 import javafx.scene.control.ToggleGroup;
