@@ -17,9 +17,14 @@ public class PgDatabaseConnector {
         dataSource = new HikariDataSource(config);
     }
 
+<<<<<<< Updated upstream
     public static Connection getConnection() throws SQLException {
     	try 
     	{
+=======
+    public static Connection getConnection() {
+    	try {
+>>>>>>> Stashed changes
             return dataSource.getConnection();
     	} 
     	catch(SQLException e) 
