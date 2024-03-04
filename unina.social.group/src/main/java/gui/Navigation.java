@@ -3,7 +3,7 @@ package gui;
 import gui.analyticsPage.AnalyticsPage;
 import gui.homePage.Homepage;
 import gui.loginPage.LoginPage;
-import gui.mainpage.MainPage;
+import gui.mainPage.MainPage;
 import gui.searchPage.SearchPage;
 import javafx.application.Platform;
 import javafx.scene.Scene;

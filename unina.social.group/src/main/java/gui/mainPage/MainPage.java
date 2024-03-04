@@ -1,4 +1,4 @@
-package gui.mainpage;
+package gui.mainPage;
 
 import controllers.MainPageController;
 import gui.ShadowPane;

@@ -1,4 +1,4 @@
-package gui.mainpage;
+package gui.mainPage;
 
 import gui.IconUtils;
 import javafx.geometry.Insets;
