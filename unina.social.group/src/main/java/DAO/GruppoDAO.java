@@ -8,17 +8,17 @@ import model.Tema;
 import util.PgDatabaseConnector;
 
 public class GruppoDAO{
-	
+
 	private Connection connection;
 	private PgDatabaseConnector dbConnector;
 	private UtenteDAO utenteDAO;
 	
-	public GruppoDAO() throws SQLException {
+	public GruppoDAO() {
 		dbConnector = new PgDatabaseConnector();
 		utenteDAO = new UtenteDAO();
 	}
 
-	public boolean insert(Gruppo group) throws Exception {
+	public boolean insert(Gruppo group) {
 		connection = PgDatabaseConnector.getConnection();
         if (connection == null) {
         	return false;
@@ -48,149 +48,8 @@ public class GruppoDAO{
     	
     	return false;
     }
-	
-//	public boolean update(Gruppo gruppo, String idGruppo) {
-//			
-//		boolean esito = false;
-//
-//		if (connection == null) {
-//			return esito;
-//		}
-//		
-//		try
-//		{
-//			String cmd = "UPDATE Gruppo SET idGruppo=?, nome=?, dataOraCreazione=?"
-//					   + ", descrizione=?, tema=? WHERE idGruppo=?";
-//			
-//			PreparedStatement pstmt = connection.prepareStatement(cmd);
-//			
-//			pstmt.setInt       (1, Integer.valueOf(gruppo.getIdGruppo()));
-//			pstmt.setString    (2, gruppo.getNome());
-//			pstmt.setTimestamp (3, Timestamp.valueOf(gruppo.getDataOraCreazione()));
-//			pstmt.setString    (4, gruppo.getDescrizione());
-//			pstmt.setString    (5, gruppo.getTema().getTema());
-//			
-//			int affectedRows = pstmt.executeUpdate();
-//			
-//			if (affectedRows == 0) {
-//				esito = false;
-//			}
-//			else {
-//				esito = true;
-//			}
-//			
-//			System.out.println("Righe aggiornate: " + affectedRows + "\n");					
-//			dbConnector.closeResources(pstmt, null, connection);			
-//		}
-//		catch (SQLException e)
-//		{
-//			System.out.println("Aggiornamento fallito.\n" + e);
-//		}
-//		
-//		return esito;
-//	}
-//	
-//	public boolean aggiornaColonnaGruppo(String idGruppo, String nomeColonna, Object nuovoValore) {
-//		
-//		boolean esito = false;
-//
-//		if (connection == null) {
-//			return esito;
-//		}
-//		
-//		try
-//		{
-//			String cmd = "UPDATE Gruppo SET " + nomeColonna + "=? WHERE idGruppo=?";
-//			
-//			PreparedStatement pstmt = connection.prepareStatement(cmd);
-//			
-//			pstmt.setObject    (1, nuovoValore);
-//			pstmt.setInt       (2, Integer.valueOf(idGruppo));
-//			
-//			int affectedRows = pstmt.executeUpdate();
-//			
-//			if (affectedRows == 0) {
-//				esito = false;
-//			}
-//			else {
-//				esito = true;
-//			}
-//			
-//			System.out.println("Righe aggiornate: " + affectedRows + "\n");
-//			dbConnector.closeResources(pstmt, null, connection);			
-//		}
-//		catch (SQLException e)
-//		{
-//			System.out.println("Aggiornamento fallito.\n" + e);
-//		}
-//		
-//		return esito;
-//	}
-//	
-//	public boolean eliminaGruppo(Gruppo gruppo) throws Exception {
-//    	
-//		boolean esito = false;
-//		
-//    	if (connection == null) {
-//    		return esito;
-//    	}
-//
-//        try 
-//        {
-//        	String cmd = "DELETE FROM Gruppo WHERE idGruppo=?";        	
-//            PreparedStatement pstmt = connection.prepareStatement(cmd);
-//            pstmt.setString(1, gruppo.getIdGruppo());
-//            int affectedRows = pstmt.executeUpdate();
-//            
-//            if (affectedRows == 0) {
-//            	esito = false;
-//            }
-//            else {
-//            	esito = true;
-//            }
-//            
-//            System.out.println("Righe eliminate: " + affectedRows + "\n");            
-//            dbConnector.closeResources(pstmt, null, connection);                
-//        } 
-//        catch (SQLException e) 
-//        {
-//        	System.out.println("Eliminazione fallita.\n" + e);
-//        	dbConnector.closeResources(null, null, connection);
-//        }    
-//        
-//        return esito;
-//    }
-//	
-//	public Gruppo getByIdGruppo(String idGruppo) {
-//		
-//		Gruppo gruppo = null;
-//		
-//		if (connection == null) {
-//			return gruppo;
-//		}
-//		
-//		try 
-//		{
-//			String cmd = "SELECT * FROM Gruppo WHERE idGruppo=?";
-//			PreparedStatement pstmt = connection.prepareStatement(cmd);
-//			ResultSet rs = pstmt.executeQuery();
-//			
-//			if (!rs.next()) {
-//				System.out.println("Non esiste alcun gruppo con id = " + idGruppo + ".\n");
-//				dbConnector.closeResources(pstmt, rs, connection);
-//				return gruppo;
-//			}
-//			
-//			//creaGruppo
-//		}
-//		catch (SQLException e) 
-//		{
-//			
-//		}
-//		return gruppo;
-//	}
-	
-	public Gruppo getById(String id) throws Exception {
+
+	public Gruppo getById(String id) {
 		Gruppo group = null;
 		
         connection = PgDatabaseConnector.getConnection();
@@ -223,7 +82,7 @@ public class GruppoDAO{
 		return group;
 	}
 	
-	public List<Gruppo> getByName(String name) throws Exception {
+	public List<Gruppo> getByName(String name) {
 		List<Gruppo> searchResults = new ArrayList<>();
 		
         connection = PgDatabaseConnector.getConnection();
@@ -257,7 +116,7 @@ public class GruppoDAO{
 		return searchResults;
 	}
 	
-	public List<Gruppo> getByTopic(String topic) throws Exception {
+	public List<Gruppo> getByTopic(String topic) {
 		List<Gruppo> searchResults = new ArrayList<>();
 		
         connection = PgDatabaseConnector.getConnection();
@@ -291,7 +150,7 @@ public class GruppoDAO{
 		return searchResults;
 	}
 	
-	public int geMemberCount(String idGruppo) throws SQLException {
+	public int geMemberCount(String idGruppo) {
 		int memberCount = 0;
 		
         connection = PgDatabaseConnector.getConnection();
@@ -326,7 +185,7 @@ public class GruppoDAO{
 		return memberCount;
 	}
 	
-	public int getPostCount(String idGruppo) throws SQLException {
+	public int getPostCount(String idGruppo) {
 		int postCount = 0;
 		
         connection = PgDatabaseConnector.getConnection();
@@ -361,7 +220,7 @@ public class GruppoDAO{
 		return postCount;
 	}
 	
-	public List<Gruppo> getSuggestedGroups(String idUtente) throws Exception {
+	public List<Gruppo> getSuggestedGroups(String idUtente) {
 		List<Gruppo> groups = new ArrayList<>();
 		
         connection = PgDatabaseConnector.getConnection();
@@ -403,15 +262,57 @@ public class GruppoDAO{
 		
 		return groups;
 	}
-	
-	public Gruppo createGroup(ResultSet rs) throws Exception {
-		return new Gruppo(
-				String.valueOf(rs.getInt("idGruppo")),
-				rs.getString("nome"),
-				rs.getTimestamp("dataOraCreazione").toLocalDateTime(),
-				rs.getString("descrizione"),                
-				new Tema(rs.getString("tema")),                
-				utenteDAO.getById(String.valueOf(rs.getInt("idOwner")))
-		);
+
+	public List<Gruppo> getGroupsOwned(String idUtente) {
+		List<Gruppo> groups = new ArrayList<>();
+		
+        connection = PgDatabaseConnector.getConnection();
+		if (connection == null) {
+			return groups;
+		}
+		
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+		
+		try {
+			String cmd = 
+					"SELECT * " +
+					"FROM Gruppo " +
+					"WHERE idOwner = ? " +
+					"ORDER BY nome";
+			
+			pstmt = connection.prepareStatement(cmd);
+            pstmt.setInt(1, Integer.parseInt(idUtente));
+            
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				groups.add(createGroup(rs));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			dbConnector.closeResources(rs, pstmt, connection);
+		}
+		
+		return groups;
 	}
+	
+	public Gruppo createGroup(ResultSet rs) {
+		Gruppo group = null;
+		try {
+			group = new Gruppo(
+					String.valueOf(rs.getInt("idGruppo")),
+					rs.getString("nome"),
+					rs.getTimestamp("dataOraCreazione").toLocalDateTime(),
+					rs.getString("descrizione"),                
+					new Tema(rs.getString("tema")),                
+					utenteDAO.getById(String.valueOf(rs.getInt("idOwner")))
+			);			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return group;
+	}
+
 }

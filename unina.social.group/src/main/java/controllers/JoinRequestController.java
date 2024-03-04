@@ -7,13 +7,13 @@ import model.Utente;
 public class JoinRequestController {
 
 	private RichiestaDiAccessoDAO richiestaDiAccessoDAO;
-	
-	public JoinRequestController() throws Exception {
+
+	public JoinRequestController() {
 		this.richiestaDiAccessoDAO = new RichiestaDiAccessoDAO();
 	}
 	
-	public boolean sendJoinRequest(Gruppo group, UserSession userSession) throws Exception {
-		return richiestaDiAccessoDAO.insert(group.getIdGruppo(), userSession.getLoggedUser().getIdUtente(), group.getOwner().getIdUtente());
+	public boolean sendJoinRequest(Gruppo group) throws Exception {
+		return richiestaDiAccessoDAO.insert(group.getIdGruppo(), UserSession.getLoggedUser().getIdUtente(), group.getOwner().getIdUtente());
 	}
 	
     public boolean checkIfUserHasPendingRequest(Gruppo group, Utente user) throws Exception{

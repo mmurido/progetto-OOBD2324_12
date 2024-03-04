@@ -1,21 +1,30 @@
 package gui;
 
-import controllers.UserSession;
+import gui.analyticsPage.AnalyticsPage;
+import gui.homePage.Homepage;
+import gui.loginPage.LoginPage;
 import gui.mainpage.MainPage;
+import gui.searchPage.SearchPage;
+import javafx.application.Platform;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 public class Navigation {
+	
+	private static Stage primaryStage;
+	private static MainPage mainPage;
+	private static Homepage homepage;
+	private static SearchPage searchPage;
+	private static AnalyticsPage analyticsPage;
+	private static UnderConstructionPage underConstructionPage;
+	
+    public static void setPrimaryStage(Stage stage) {
+        primaryStage = stage;
+    }
 
-	private UserSession userSession;
-	
-	public Navigation(UserSession userSession) {
-		this.userSession = userSession;
-	}
-	
-	public void goBackToLoginScreen(Stage primaryStage) {
-		LoginScreen loginScreen = new LoginScreen();
+	public static void navigateToLoginPage() {
+		LoginPage loginScreen = new LoginPage();
+
 		try 
 		{
 			Thread.sleep(500);
@@ -24,29 +33,42 @@ public class Navigation {
 			loginScreen.start(new Stage());
 		} 
 		catch (Exception e) {
-			System.out.println(e);
+			e.printStackTrace();
 		}
 	}
-	
-	public void goToMainPage(Stage primaryStage) {
-        MainPage mainPage = new MainPage(userSession);
-        Scene scene = mainPage.getScene(primaryStage);
+
+	public static void navigateToMainPage() {
+        mainPage = new MainPage(primaryStage);
+        Scene scene = mainPage.scene;
+        
 		primaryStage.setScene(scene);
-		primaryStage.centerOnScreen();
-		primaryStage.setResizable(true);
+		primaryStage.requestFocus();
+		
+	    Platform.runLater(() -> {
+	        primaryStage.centerOnScreen();
+	    });
+
+		navigateToHomepage();	
 	}
 	
-	public void goToSearchPage(AnchorPane pane) throws Exception {
-        pane.getChildren().clear();
-		SearchPage searchPage = new SearchPage(userSession);
-		pane.getChildren().add(searchPage.setupSearchPage());
+	public static void navigateToSearchPage() {
+		searchPage = new SearchPage();
+		mainPage.innerBorderPane.setCenter(searchPage);
 	}
 	
-	public void goToHomepage(AnchorPane pane) throws Exception {
-		pane.getChildren().clear();
-		Homepage homepage = new Homepage(userSession);
-		pane.getChildren().add(homepage.setupHomepage());
+	public static void navigateToHomepage() {
+		homepage = new Homepage();
+		mainPage.innerBorderPane.setCenter(homepage);
 	}
 	
+	public static void navigateToAnalyticsPage() {
+		analyticsPage = new AnalyticsPage();
+		mainPage.innerBorderPane.setCenter(analyticsPage);
+	}
+	
+	public static void navigateToUnderConstructionPage() {
+		underConstructionPage = new UnderConstructionPage();
+		mainPage.innerBorderPane.setCenter(underConstructionPage);
+	}
 
 }

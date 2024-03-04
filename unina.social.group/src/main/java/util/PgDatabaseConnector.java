@@ -23,7 +23,7 @@ public class PgDatabaseConnector {
         dataSource = new HikariDataSource(config);
     }
 
-    public static Connection getConnection() throws SQLException {
+    public static Connection getConnection() {
     	try {
             return dataSource.getConnection();
     	} catch(SQLException e) {
@@ -32,22 +32,26 @@ public class PgDatabaseConnector {
     	}
     }
     
-    public void closeResources(ResultSet rs, Statement stmt, Connection connection) {
-        try {
-            if (rs != null) {
-                rs.close();
-            }
-
-            if (stmt != null) {
-                stmt.close();
-            }
-
-            if (connection != null && !connection.isClosed()) {
-                connection.close();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public void closeResources(ResultSet rs, Statement stmt, Connection con) {
+    	try 
+    	{
+    		
+    		if (rs != null && !rs.isClosed()) {
+    			rs.close();
+    		}
+    		
+    		if (stmt != null && !stmt.isClosed()) {
+    			stmt.close();
+    		}
+    		
+    		if (con != null && !con.isClosed()) {
+    			con.close();
+    		}
+    	} 
+    	catch (SQLException e) 
+    	{
+    		e.printStackTrace();
+    	}
     }
     
     

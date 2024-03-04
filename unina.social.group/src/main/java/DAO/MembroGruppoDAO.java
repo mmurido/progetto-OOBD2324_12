@@ -14,11 +14,11 @@ public class MembroGruppoDAO {
 	private Connection connection;
 	private PgDatabaseConnector dbConnector;
 	
-	public MembroGruppoDAO() throws SQLException {
+	public MembroGruppoDAO() {
 		dbConnector = new PgDatabaseConnector();
 	}
 	
-	public boolean isMember(String idGruppo, String idUtente) throws Exception {		
+	public boolean isMember(String idGruppo, String idUtente) {		
 		connection = PgDatabaseConnector.getConnection();
 		if (connection == null) {
 			return false;
@@ -52,7 +52,7 @@ public class MembroGruppoDAO {
 		return false;
 	}
 	
-	public List<String> getUserGroupIds(String idUtente) throws Exception {
+	public List<String> getUserGroupIds(String idUtente) {
 		List<String> groupsIds = new ArrayList<>();
 		
 		connection = PgDatabaseConnector.getConnection();

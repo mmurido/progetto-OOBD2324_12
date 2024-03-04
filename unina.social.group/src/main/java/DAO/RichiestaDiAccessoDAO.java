@@ -14,11 +14,11 @@ public class RichiestaDiAccessoDAO {
 	private Connection connection;
 	private PgDatabaseConnector dbConnector;
 	
-	public RichiestaDiAccessoDAO() throws SQLException {
+	public RichiestaDiAccessoDAO() {
 		dbConnector = new PgDatabaseConnector();
 	}
 
-	public boolean insert(String idGruppo, String idMittente, String idDestinatario) throws Exception {
+	public boolean insert(String idGruppo, String idMittente, String idDestinatario) {
 		connection = PgDatabaseConnector.getConnection();
 		if (connection == null) {
 			return false;
@@ -50,8 +50,8 @@ public class RichiestaDiAccessoDAO {
 		
 		return false;
 	}
-	
-	public boolean hasPendingAccessRequest(String idGruppo, String idMittente) throws Exception {
+
+	public boolean hasPendingAccessRequest(String idGruppo, String idMittente) {
 		connection = PgDatabaseConnector.getConnection();
 		if (connection == null) {
 			return false;

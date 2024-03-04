@@ -3,14 +3,14 @@ package controllers;
 import model.Utente;
 
 public class UserSession {
-	
-	private Utente loggedUser;
 
-	public void setLoggedUser(Utente user) {
-		this.loggedUser = user;
+	private static Utente loggedUser;
+
+	public static void setLoggedUser(Utente user) {
+		loggedUser = user;
 	}
 	
-	public Utente getLoggedUser() {
+	public static Utente getLoggedUser() {
 		return loggedUser;
 	}
 }

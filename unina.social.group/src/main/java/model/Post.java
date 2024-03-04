@@ -4,15 +4,17 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class Post {
+	private String idPost;
     private Gruppo gruppo;
     private Utente autore;
     private LocalDateTime dataOraPubblicazione;
     private String testo;
     private List<String> urlFoto;
-    private TipoPost tipo;
+    private String tipo;
 
-    public Post(Gruppo gruppo, Utente autore, LocalDateTime dataOraPubblicazione, String testo, List<String> urlFoto, TipoPost tipo) {
-        this.gruppo = gruppo;
+    public Post(String idPost, Gruppo gruppo, Utente autore, LocalDateTime dataOraPubblicazione, String testo, List<String> urlFoto, String tipo) {
+        this.idPost = idPost;
+    	this.gruppo = gruppo;
         this.autore = autore;
         this.dataOraPubblicazione = dataOraPubblicazione;
         this.testo = testo;
@@ -20,6 +22,10 @@ public class Post {
         this.tipo = tipo;
     }
 
+    public String getIdPost() {
+        return idPost;
+    }
+    
     public Gruppo getGruppo() {
         return gruppo;
     }
@@ -60,18 +66,16 @@ public class Post {
         this.urlFoto = urlFoto;
     }
 
-    public TipoPost getTipo() {
+    public String getTipo() {
         return tipo;
     }
 
-    public void setTipo(TipoPost tipo) {
+    public void setTipo(String tipo) {
         this.tipo = tipo;
     }
-    public enum TipoPost {
-        testo,
-        foto,
-        testo_e_foto,
-        post_con_testo_e_foto
+    
+    public void setIdPost(String idPost) {
+        this.idPost = idPost;
     }
 
 }
