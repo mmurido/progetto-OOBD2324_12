@@ -1,0 +1,76 @@
+.axis {
+    -fx-font-size: 1.4em;    
+    -fx-tick-label-fill: #e6ad38;
+    -fx-font-family: Product Sans;
+    -fx-tick-length: 10;
+    -fx-minor-tick-length: 5;
+}
+
+.axis:left {
+	-fx-border-color: transparent #5b5b5b transparent transparent;
+	-fx-border-width: 2;
+}
+
+.axis:bottom {
+	-fx-border-color: #5b5b5b transparent transparent;
+	-fx-border-width: 2;
+}
+ 
+.chart-legend {
+    -fx-text-fill: black;
+}
+
+.chart-plot-background {
+   -fx-background-color: #f5f5f5;
+}
+
+.chart-vertical-grid-lines {
+    -fx-stroke: #bcbcbc; 
+    -fx-stroke-dash-array: none;
+}
+
+.chart-horizontal-grid-lines {
+    -fx-stroke: #bcbcbc; 
+    -fx-stroke-dash-array: none;
+}
+
+.chart-alternative-row-fill {
+    -fx-fill: #eeeeee;
+    -fx-stroke: transparent;
+    -fx-stroke-width: 0;
+}
+
+.chart-title {
+  -fx-text-fill: #0e5460;
+  -fx-font-size: 1.6em;
+  -fx-font-weight: bold;
+  -fx-font-family: Product Sans;
+  -fx-translate-x: 25;
+}
+ 
+.axis-label {
+  -fx-text-fill: #0e5460;
+  -fx-font-family: Product Sans;
+}
+
+.axis-tick-mark {
+	-fx-stroke: #5b5b5b;
+	-fx-stroke-width: 1;
+}
+
+.axis-minor-tick-mark {
+	-fx-stroke: #5b5b5b;
+}
+
+.chart-legend {
+	-fx-background-color: #eeeeee;
+}
+
+.char-legend-item-symbol {
+	-fx-background-radius: 20;
+}
+
+.chart-legend-item {
+	-fx-text-fill: black;
+  	-fx-font-family: Product Sans;
+}
