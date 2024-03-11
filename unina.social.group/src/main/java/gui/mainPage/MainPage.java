@@ -1,8 +1,10 @@
 package gui.mainPage;
 
-import controllers.MainPageController;
-import gui.ShadowPane;
-import gui.WindowControls;
+import controllers.Navigation;
+
+import gui.commonComponents.ShadowPane;
+import gui.commonComponents.WindowControls;
+
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -22,23 +24,29 @@ import javafx.util.Duration;
 
 public class MainPage extends BorderPane {
 
-	private MainPageController controller;
-	private Stage primaryStage;
-	public ShadowPane shadowPane;
-	public Scene scene;
-	public BorderPane innerBorderPane;
-	public AnchorPane windowControlsBar;
-	public WindowControls windowControls;
-	public CollapsedSidebar collapsedSidebar;
-	public ExpandedSidebar expandedSidebar;
-	private double xOffset = 0;
-	private double yOffset = 0;
+	Stage primaryStage;
+	ShadowPane shadowPane;
+	Scene scene;
+	BorderPane innerBorderPane;
+	AnchorPane windowControlsBar;
+	WindowControls windowControls;
+	CollapsedSidebar collapsedSidebar;
+	ExpandedSidebar expandedSidebar;
+	double xOffset = 0;
+	double yOffset = 0;
 	
 	public MainPage(Stage primaryStage) {
 		this.primaryStage = primaryStage;
-		controller = new MainPageController(this);
 		initializeComponents();
 		layoutComponents();
+		setExpandButtonBehavior();
+		setCollapseButtonBehavior();
+		bindCollapsedAndExpandedSidebarButtons();
+		handleClickOutsideOfSidebar();
+		makeStageDraggable();
+		
+		Navigation.setInnerBorderPane(innerBorderPane);
+		Navigation.setScene(scene);
 	}
 	
 	private void initializeComponents() {
@@ -52,13 +60,9 @@ public class MainPage extends BorderPane {
 		
 		setupShadowPane();
 		setupWindowControls();		
-		innerBorderPane = new BorderPane();		
+		innerBorderPane = new BorderPane();	
 		collapsedSidebar = new CollapsedSidebar();
 		expandedSidebar = new ExpandedSidebar();
-		bindCollapsedAndExpandedSidebarButtons();
-		controller.configureButtonsBehavior();
-		handleClickOutsideOfSidebar();
-		makeStageDraggable();
 		
         DoubleBinding adjustedHeight = Bindings.subtract(this.heightProperty(), 8.0);
 		expandedSidebar.slider.heightProperty().bind(adjustedHeight);
@@ -82,6 +86,18 @@ public class MainPage extends BorderPane {
 	private void setupWindowControls() {
 		windowControlsBar = new AnchorPane();
 		windowControls = new WindowControls(primaryStage, this);
+	}
+	
+	private void setExpandButtonBehavior() {
+		collapsedSidebar.expandButton.setOnMouseClicked(event -> {
+			expandSidebar();
+		});
+	}
+	
+	private void setCollapseButtonBehavior() {
+		expandedSidebar.topSection.collapseButton.setOnMouseClicked(event -> {
+			collapseSidebar();
+		});
 	}
 	
 	private void animateSidebarSliding(double targetWidth, Node sidebar) {
@@ -116,11 +132,11 @@ public class MainPage extends BorderPane {
 	    logoutButtonTranslateTransition.play();
 	}
 
-	public void collapseSidebar() {
+	private void collapseSidebar() {
 	    animateSidebarSliding(175, collapsedSidebar);
 	}
 
-	public void expandSidebar() {
+	private void expandSidebar() {
 	    animateSidebarSliding(0, expandedSidebar);
 	}
 	
@@ -164,5 +180,6 @@ public class MainPage extends BorderPane {
 				collapseSidebar();
 		});
 	}
+
 }
 

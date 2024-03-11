@@ -1,14 +1,14 @@
 package gui.mainPage;
 
-import gui.IconUtils;
+import gui.commonComponents.IconUtils;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 
 public class NavigationButton extends SidebarButton {
 	
-	public ToggleGroup toggleGroup;
-	public Label label;
+	ToggleGroup toggleGroup;
+	Label label;
 	
 	static final String LABEL_STYLE =
 			"-fx-font-family: 'Product Sans'; -fx-font-size: 14; -fx-text-fill: white;";

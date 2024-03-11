@@ -1,7 +1,10 @@
 package gui.analyticsPage;
 
+import java.util.Arrays;
+import java.util.List;
+
 import controllers.AnalyticsPageController;
-import gui.IconUtils;
+import gui.commonComponents.IconUtils;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.control.Button;
@@ -16,11 +19,11 @@ import javafx.scene.layout.VBox;
 public class AnalyticsFilterBox extends HBox {
 
 	private AnalyticsPageController controller;
-	public ChoiceBox<String> groupChoiceBox;
-	public ChoiceBox<String> yearChoiceBox;
-	public ChoiceBox<String> monthChoiceBox;
-	public Button clearChoicesButton;
-	public Button showReportButton;
+	ChoiceBox<String> groupChoiceBox;
+	ChoiceBox<String> yearChoiceBox;
+	ChoiceBox<String> monthChoiceBox;
+	Button clearChoicesButton;
+	Button showReportButton;
 	
 	public AnalyticsFilterBox(AnalyticsPageController controller) {
 		this.controller = controller;
@@ -49,19 +52,18 @@ public class AnalyticsFilterBox extends HBox {
 
 	private void setupLabeledChoiceBoxes() {		
 		groupChoiceBox = createChoiceBox(150.0);
+		setupLabeledChoiceBox("Gruppo:", groupChoiceBox);
 		handleGroupSelection();
 		
 		yearChoiceBox = createChoiceBox(60.0);
+		setupLabeledChoiceBox("Anno:", yearChoiceBox);
 		yearChoiceBox.setDisable(true);
 		handleYearSelection();
 
 		monthChoiceBox = createChoiceBox(90.0);
+		setupLabeledChoiceBox("Mese:", monthChoiceBox);
 		monthChoiceBox.setDisable(true);
 		handleMonthSelection();
-		
-		setupLabeledChoiceBox("Gruppo:", groupChoiceBox);
-		setupLabeledChoiceBox("Anno:", yearChoiceBox);
-		setupLabeledChoiceBox("Mese:", monthChoiceBox);
 	}
 	
 	private ChoiceBox<String> createChoiceBox(double width) {
@@ -88,31 +90,48 @@ public class AnalyticsFilterBox extends HBox {
 		return label;
 	}
 	
-	private void handleYearSelection() {
-		yearChoiceBox.getSelectionModel().selectedItemProperty()
-		.addListener((observable, oldValue, newValue) -> {
-			if (newValue != null)
-				controller.onYearSelected();
-		});
-	}
-	
 	private void handleGroupSelection() {
 		groupChoiceBox.getSelectionModel().selectedItemProperty()
 		.addListener((observable, oldValue, newValue) -> {
-			if (newValue != null)
-				controller.onGroupSelected();
+			if (newValue != null) {
+				yearChoiceBox.setDisable(false);	
+				blockSelection(groupChoiceBox);
+				String selectedGroupName = groupChoiceBox.getValue();				
+				controller.onGroupSelected(selectedGroupName);				
+			}
 		});
 	}
 	
+	private void handleYearSelection() {
+		yearChoiceBox.getSelectionModel().selectedItemProperty()
+		.addListener((observable, oldValue, newValue) -> {
+			if (newValue != null) {
+		        monthChoiceBox.setDisable(false);
+		        blockSelection(yearChoiceBox);
+		        int selectedYear = Integer.parseInt(yearChoiceBox.getValue());
+				controller.onYearSelected(selectedYear);
+			}
+		});
+	}
+
 	private void handleMonthSelection() {
 		monthChoiceBox.getSelectionModel().selectedItemProperty()
 		.addListener((observable, oldValue, newValue) -> {
-			if (newValue != null)
-				controller.onMonthSelected();			
+			if (newValue != null) {
+				blockSelection(monthChoiceBox);    			
+				addClearAndShowButtons();
+				
+		        List<String> allMonths = Arrays.asList(
+		                "Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno",
+		                "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre");
+		        
+				int selectedMonth = allMonths.indexOf(monthChoiceBox.getValue()) +1;
+				controller.onMonthSelected(selectedMonth);
+			}
 		});
 	}
 	
-	public void addClearAndShowButton() {
+	public void addClearAndShowButtons() {
 		this.getChildren().addAll(clearChoicesButton, showReportButton);
 	}
 		
@@ -125,8 +144,6 @@ public class AnalyticsFilterBox extends HBox {
 				"-fx-background-color: transparent; -fx-font-family: 'Comfortaa'; -fx-font-size: 20;" + 
 				"-fx-fill: black; -fx-alignment: CENTER; -fx-font-weight: bold;"
 		);
-		
-		handleClearChoicesButtonClicked();
 	}
 	
 	private void createShowReportButton() {
@@ -137,20 +154,27 @@ public class AnalyticsFilterBox extends HBox {
 		showReportButton.setCursor(Cursor.HAND);
 		showReportButton.setPrefHeight(40);
 		showReportButton.setStyle("-fx-background-color: transparent;");
+	}
+	
+	public void reset() {
+		getChildren().removeAll(clearChoicesButton, showReportButton);
+		clearChoices();
+	}
+	
+	private void clearChoices() {
+		unblockSelection(monthChoiceBox);
+		unblockSelection(groupChoiceBox);
+		unblockSelection(yearChoiceBox);
 		
-		handleShowReportButtonClicked();
-	}
-	
-	private void handleClearChoicesButtonClicked() {
-		clearChoicesButton.setOnAction(event -> {
-			controller.onClearChoicesButtonClicked();
-		});
-	}
-	
-	private void handleShowReportButtonClicked() {
-		showReportButton.setOnAction(event -> {
-			controller.onShowReportButtonClicked();
-		});
+		groupChoiceBox.setValue(null);
+		yearChoiceBox.setValue(null);
+		monthChoiceBox.setValue(null);
+
+		yearChoiceBox.getItems().clear();
+		monthChoiceBox.getItems().clear();
+
+		yearChoiceBox.setDisable(true);
+		monthChoiceBox.setDisable(true);
 	}
 	
     public void blockSelection(ChoiceBox<String> choiceBox) {
@@ -175,9 +199,7 @@ public class AnalyticsFilterBox extends HBox {
     
     public void unblockSelection(ChoiceBox<String> choiceBox) {
         StackPane stackPane = (StackPane) choiceBox.getParent();
-
         stackPane.getChildren().removeIf(node -> node instanceof Button);
-
         choiceBox.setVisible(true);
     }
 }

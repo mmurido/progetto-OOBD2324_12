@@ -1,28 +1,23 @@
 package gui.homePage;
 
 import java.util.List;
-import controllers.GroupController;
-import controllers.UserSession;
-import gui.searchPage.GroupCard;
+
+import gui.commonComponents.GroupCard;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import model.Gruppo;
 
 public class SuggestedGroupsSection extends BorderPane {
 	
-	private GroupController controller;
-	public StackPane header;
-	public Label label;	
-	public ScrollPane scrollPane;
-	public List<Gruppo> suggestedGroups;
-	public VBox suggestionsBox;
+	StackPane header;
+	Label label;	
+	ScrollPane scrollPane;
+	VBox suggestionsBox;
 		
 	public SuggestedGroupsSection() {
-		this.controller = new GroupController();
 		initializeComponents();
 		layoutComponents();
 	}
@@ -36,7 +31,7 @@ public class SuggestedGroupsSection extends BorderPane {
         
         setupHeader();
         setupScrollPane();
-        setupSuggestionsDisplay();
+        setupSuggestionsBox();
 	}
 	
 	private void layoutComponents() {
@@ -71,14 +66,13 @@ public class SuggestedGroupsSection extends BorderPane {
         scrollPane.getStylesheets().add(cssPath);
 	}
 	
-	private void setupSuggestionsDisplay() {
-        suggestedGroups = controller.getSuggestedGroups(UserSession.getLoggedUser());
-        
+	private void setupSuggestionsBox() {     
         suggestionsBox = new VBox(30);
         suggestionsBox.setPadding(new Insets(10, 20, 15, 20));
-        
-        for (Gruppo group : suggestedGroups) {
-        	GroupCard groupCard = new GroupCard(group);
+	}
+	
+	public void displaySuggestedGroups(List<GroupCard> groupCardsToDisplay) {
+        for (GroupCard groupCard : groupCardsToDisplay) {
             suggestionsBox.getChildren().add(groupCard);
         }
 	}

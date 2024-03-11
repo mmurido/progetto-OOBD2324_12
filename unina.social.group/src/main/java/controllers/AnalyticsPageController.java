@@ -1,118 +1,108 @@
 package controllers;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.YearMonth;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import DAO.GruppoDAO;
+
+import DAO.GroupDAO;
 import DAO.PostDAO;
-import gui.analyticsPage.AnalyticsFilterBox;
 import gui.analyticsPage.AnalyticsPage;
+import gui.commonComponents.PostCard;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import model.Gruppo;
+import model.Group;
 import model.Post;
-import model.Utente;
 
 public class AnalyticsPageController {
 
 	private AnalyticsPage analyticsPage;
-	private GruppoDAO gruppoDAO;
+	private GroupDAO gruppoDAO;
 	private PostDAO postDAO;
-	public List<Gruppo> ownedGroups;
-	public Gruppo selectedGroup;
+	public List<Group> ownedGroups;
+	public Group selectedGroup;
 	public int selectedYear;
 	public int selectedMonth;
-	public Post mostLikedPost ;
-	public Post leastLikedPost;
-	public Post mostCommentedPost;
-	public Post leastCommentedPost;
-	public int highestLikeCount;
-	public int lowestLikeCount;
-	public int highestCommentsCount;
-	public int lowestCommentsCount;
 
     public AnalyticsPageController(AnalyticsPage analyticsPage) {
     	this.analyticsPage = analyticsPage;
-        this.gruppoDAO = new GruppoDAO();
+        this.gruppoDAO = new GroupDAO();
         this.postDAO = new PostDAO();
-        ownedGroups = getGroupsOwned(UserSession.getLoggedUser());
     }
 
-    public List<Gruppo> getGroupsOwned(Utente user) {
-    	List<Gruppo> groups = new ArrayList<>();
-    	
-    	try {
-        	groups = gruppoDAO.getGroupsOwned(user.getIdUtente());
-    	} catch(Exception e) {
-    		e.printStackTrace();
-    	}
-    	
-    	return groups;
+    public void getGroupsOwned(String username) {
+    	ownedGroups = gruppoDAO.getGroupsOwned(username);
     }
     
-    public void getMostLikedPostOfGroupInMonthYear() {
+    public PostCard getMostLikedPostOfGroupInMonthYear() {
     	Object[] postAndCount = postDAO.getMostLikedPostOfGroupInMonthYear(
-    			selectedGroup.getIdGruppo(), selectedMonth, selectedYear);
+    			selectedGroup.getId(), selectedMonth, selectedYear);
     	
-    	if (postAndCount != null) {
-        	mostLikedPost = (Post) postAndCount[0];
-        	highestLikeCount = (int) postAndCount[1];
-    	}
-    	else {
-        	mostLikedPost = null;
-        	highestLikeCount = 0;
-    	}
+    	if (postAndCount == null)
+    		return null;
+
+    	Post mostLikedPost = (Post) postAndCount[0];
+    	int highestLikeCount = (int) postAndCount[1];
+
+		PostCard postCard = createPostCard(mostLikedPost);
+		postCard.displayLikeCount(highestLikeCount);
+		
+		return postCard;	
     }
     
-    public void getLeastLikedPostOfGroupInMonthYear() {
+    public PostCard getLeastLikedPostOfGroupInMonthYear() {
     	Object[] postAndCount = postDAO.getLeastLikedPostOfGroupInMonthYear(
-    			selectedGroup.getIdGruppo(), selectedMonth, selectedYear);
+    			selectedGroup.getId(), selectedMonth, selectedYear);
     	
-    	if (postAndCount != null) {
-        	leastLikedPost = (Post) postAndCount[0];
-        	lowestLikeCount = (int) postAndCount[1];
-    	}
-    	else {
-        	leastLikedPost = null;
-        	lowestLikeCount = 0;
-    	}
+    	if (postAndCount == null) 
+    		return null;
     	
+    	Post leastLikedPost = (Post) postAndCount[0];
+    	int lowestLikeCount = (int) postAndCount[1];
+
+		PostCard postCard = createPostCard(leastLikedPost);
+		postCard.displayLikeCount(lowestLikeCount);
+		
+		return postCard;    	
     }
     
-    public void getMostCommentedPostOfGroupInMonthYear() {
+    public PostCard getMostCommentedPostOfGroupInMonthYear() {
     	Object[] postAndCount = postDAO.getMostCommentedPostOfGroupInMonthYear(
-    			selectedGroup.getIdGruppo(), selectedMonth, selectedYear); 
+    			selectedGroup.getId(), selectedMonth, selectedYear); 
     	
-    	if (postAndCount != null) {
-        	mostCommentedPost = (Post) postAndCount[0];
-        	highestCommentsCount = (int) postAndCount[1];
-    	}
-    	else {
-        	mostCommentedPost = null;
-        	highestCommentsCount = 0;
-    	}
+    	if (postAndCount == null) 
+    		return null;
+    	
+        Post mostCommentedPost = (Post) postAndCount[0];
+        int highestCommentsCount = (int) postAndCount[1];
+        
+		PostCard postCard = createPostCard(mostCommentedPost);
+		postCard.displayCommentsCount(highestCommentsCount);
+		
+		return postCard;
     }
     
-    public void getLeastCommentedPostOfGroupInMonthYear() {
+    public PostCard getLeastCommentedPostOfGroupInMonthYear() {
     	Object[] postAndCount = postDAO.getLeastCommentedPostOfGroupInMonthYear(
-    			selectedGroup.getIdGruppo(), selectedMonth, selectedYear);	
+    			selectedGroup.getId(), selectedMonth, selectedYear);	
     	
-    	if (postAndCount != null) {
-        	leastCommentedPost = (Post) postAndCount[0];
-        	lowestCommentsCount = (int) postAndCount[1];
-    	}
-    	else {
-        	leastCommentedPost = null;
-        	lowestCommentsCount = 0;
-    	}
-    }
+    	if (postAndCount == null)
+    		return null;
+    		
+        Post leastCommentedPost = (Post) postAndCount[0];
+        int lowestCommentsCount = (int) postAndCount[1];
+        
+		PostCard postCard = createPostCard(leastCommentedPost);
+		postCard.displayCommentsCount(lowestCommentsCount);
+		
+		return postCard;  
+	}
     
     public double calculateAveragePosts() {
     	int totalPostCount = postDAO.getPostCountOfGroupInMonthYear(
-    				selectedGroup.getIdGruppo(), selectedMonth, selectedYear);
+    				selectedGroup.getId(), selectedMonth, selectedYear);
 
         YearMonth yearMonth = YearMonth.of(selectedYear, selectedMonth);
 
@@ -125,57 +115,35 @@ public class AnalyticsPageController {
     
     public Map<Integer, Integer> getPostsCountPerDay() {
     	return postDAO.getPostsCountPerDay(
-    			selectedGroup.getIdGruppo(), selectedMonth, selectedYear);
+    			selectedGroup.getId(), selectedMonth, selectedYear);
     }
     
-	public void setItemsIntoGroupChoiceBox() {
-		ObservableList<String> groupOptions = FXCollections.observableArrayList();
-
-		for (Gruppo group : ownedGroups) {
-			groupOptions.add(group.getNome());
-		}
-
-		analyticsPage.filterBox.groupChoiceBox.setItems(groupOptions);
-	}
+    public void getGroupOptions() {
+        getGroupsOwned(UserSession.getLoggedUserUsername());
+        
+        ObservableList<String> groupOptions = FXCollections.observableArrayList();
+        
+        for(Group group: ownedGroups) {
+        	String groupName = group.getName();
+        	groupOptions.add(groupName);
+        }
+        
+        analyticsPage.setGroupOptions(groupOptions);
+    }
     
-    public void onGroupSelected() {
-		analyticsPage.filterBox.yearChoiceBox.setDisable(false);
-
-		String selectedGroupName = analyticsPage.filterBox.groupChoiceBox.getValue();
-
-		for (Gruppo group : ownedGroups) {
-			if (group.getNome().equals(selectedGroupName)) {
+	public void onGroupSelected(String selectedGroupName) {
+		for (Group group : ownedGroups) {
+			if (group.getName().equals(selectedGroupName)) {
 				selectedGroup = group;
 				break;
 			}
 		}
 		
-        analyticsPage.filterBox.blockSelection(analyticsPage.filterBox.groupChoiceBox);
-		setItemsIntoYearChoiceBox();
-    }
-    
-    public void onYearSelected() {
-        selectedYear = Integer.parseInt(analyticsPage.filterBox.yearChoiceBox.getValue());
-        analyticsPage.filterBox.monthChoiceBox.setDisable(false);
-        analyticsPage.filterBox.blockSelection(analyticsPage.filterBox.yearChoiceBox);
-        setItemsIntoMonthChoiceBox();
-    }
-    
-	public void onMonthSelected() {
-        List<String> allMonths = Arrays.asList(
-                "Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno",
-                "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"
-        );
-        
-		selectedMonth = allMonths.indexOf(analyticsPage.filterBox.monthChoiceBox.getValue()) +1;
-		
-		analyticsPage.filterBox.blockSelection(analyticsPage.filterBox.monthChoiceBox);
-    			
-		analyticsPage.filterBox.addClearAndShowButton();
+		getYearOptionsBasedOn(selectedGroup);
 	}
-    
-	private void setItemsIntoYearChoiceBox() {
-		int yearOfCreation = selectedGroup.getDataOraCreazione().getYear();
+	
+	private void getYearOptionsBasedOn(Group selectedGroup) {
+		int yearOfCreation = selectedGroup.getCreatedAt().getYear();
 
 		int currentYear = LocalDate.now().getYear();
 
@@ -185,12 +153,17 @@ public class AnalyticsPageController {
 			yearOptions.add(String.valueOf(year));
 		}
 
-		analyticsPage.filterBox.yearChoiceBox.setItems(yearOptions);
+		analyticsPage.setYearOptions(yearOptions);
 	}
-    
-	private void setItemsIntoMonthChoiceBox() {
-        int yearOfCreation = selectedGroup.getDataOraCreazione().getYear();
-		int monthOfCreation = selectedGroup.getDataOraCreazione().getMonth().getValue();
+	
+	public void onYearSelected(int selectedYear) {
+		this.selectedYear = selectedYear;
+		getMonthOptionsBasedOn(selectedYear);
+	}
+	
+	private void getMonthOptionsBasedOn(int selectedYear) {
+        int yearOfCreation = selectedGroup.getCreatedAt().getYear();
+		int monthOfCreation = selectedGroup.getCreatedAt().getMonth().getValue();
         int currentYear = LocalDate.now().getYear();
         
         List<String> allMonths = Arrays.asList(
@@ -198,59 +171,44 @@ public class AnalyticsPageController {
                 "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"
         );
         
-        ObservableList<String> filteredMonths = FXCollections.observableArrayList();
+        ObservableList<String> monthOptions = FXCollections.observableArrayList();
         
-        if (selectedYear == yearOfCreation) {
+        if (selectedYear == yearOfCreation && yearOfCreation == currentYear) 
+        	monthOptions = FXCollections.observableArrayList(
+        			allMonths.subList(monthOfCreation-1, LocalDate.now().getMonthValue()));;
+	          
+	    if (selectedYear == yearOfCreation && yearOfCreation != currentYear)
+	    	monthOptions = FXCollections.observableArrayList(
+	    			allMonths.subList(monthOfCreation-1, allMonths.size()));
         	
-        	if (yearOfCreation == currentYear) {
-	            filteredMonths = FXCollections.observableArrayList(allMonths.subList(monthOfCreation-1, LocalDate.now().getMonthValue()));;
-        	}
-        	else {
-	            filteredMonths = FXCollections.observableArrayList(allMonths.subList(monthOfCreation-1, allMonths.size()));
-        	}
+	    if (selectedYear != yearOfCreation && selectedYear == currentYear)
+        	monthOptions = FXCollections.observableArrayList(
+        			allMonths.subList(0, LocalDate.now().getMonthValue()));
 
-        } else if (selectedYear == currentYear) {
-        	filteredMonths = FXCollections.observableArrayList(allMonths.subList(0, LocalDate.now().getMonthValue()));
-        } else {
-            filteredMonths = FXCollections.observableArrayList(allMonths);
-        
-        }
+	    if (selectedYear != yearOfCreation && selectedYear != currentYear)
+            monthOptions = FXCollections.observableArrayList(allMonths);
 
-        analyticsPage.filterBox.monthChoiceBox.setItems(filteredMonths);
+        analyticsPage.setMonthOptions(monthOptions);
 	}
 	
-	public void onClearChoicesButtonClicked() {
-		AnalyticsFilterBox filterBox = analyticsPage.filterBox;
-		
-		//remove previous report
-		analyticsPage.reportDisplay.setVisible(false);
-		
-		//remove clear choices button and show report button from filter box
-		filterBox.getChildren().removeAll(
-				filterBox.clearChoicesButton, 
-				filterBox.showReportButton
-		);
-		
-        //reset group choice box
-		filterBox.unblockSelection(analyticsPage.filterBox.groupChoiceBox);
-		filterBox.groupChoiceBox.setValue(null);
-        
-		//reset year choice box
-		filterBox.unblockSelection(analyticsPage.filterBox.yearChoiceBox);
-		filterBox.yearChoiceBox.getItems().clear();
-		filterBox.yearChoiceBox.setDisable(true);
-		filterBox.yearChoiceBox.setValue(null);
-        
-        //reset month choice box
-		filterBox.unblockSelection(analyticsPage.filterBox.monthChoiceBox);
-		filterBox.monthChoiceBox.getItems().clear();
-		filterBox.monthChoiceBox.setDisable(true);
-		filterBox.monthChoiceBox.setValue(null);
+	public void onMonthSelected(int selectedMonth) {
+		this.selectedMonth = selectedMonth;
 	}
 	
-	public void onShowReportButtonClicked() {
-		analyticsPage.reportDisplay.displayReport();
-		analyticsPage.reportDisplay.setVisible(true);
+	private PostCard createPostCard(Post post) {
+		String postId = post.getId();
+		String postText = post.getText();
+		LocalDateTime createdAt = post.getCreatedAt();
+		String groupId = post.getGroup().getId();
+		String postAuthorUsername = post.getAuthor().getUsername();
+		String postAuthorName = post.getAuthor().getName();
+		String postAuthorSurname = post.getAuthor().getSurname();
+    	
+    	PostCard postCard = new PostCard(
+    			postId, postText, createdAt, groupId, 
+    			postAuthorUsername, postAuthorName, postAuthorSurname);
+    	
+        return postCard;
 	}
     
 }

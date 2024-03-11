@@ -8,8 +8,8 @@ import javafx.scene.text.FontWeight;
 
 public class LoginPageHeading extends VBox{
 
-	public Label title;
-	public Button errorMessage;
+	Label title;
+	Button errorMessage;
 	
 	private static final String errorMessageStyle = 
 			"-fx-background-color: b61f1f;" +

@@ -1,6 +1,6 @@
 package gui.homePage;
 
-import gui.IconUtils;
+import gui.commonComponents.IconUtils;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -14,13 +14,13 @@ import javafx.scene.layout.StackPane;
 
 public class SearchAndSortBox extends HBox {
 	
-	public StackPane searchBar;
-	public TextField searchField;
-	public ToggleGroup toggleGroup;
-	public ToggleButton sortAZButton;
-	public ToggleButton sortZAButton;
-	public Button highlightedText;
-	public Button deleteButton;
+	StackPane searchBar;
+	TextField searchField;
+	ToggleGroup toggleGroup;
+	ToggleButton sortAZButton;
+	ToggleButton sortZAButton;
+	Button highlightedText;
+	Button deleteButton;
 
 	private static final String SEARCH_AND_SORT_BOX_STYLE = 
     		"-fx-background-color: #fbfbfb; -fx-background-radius: 5;" +

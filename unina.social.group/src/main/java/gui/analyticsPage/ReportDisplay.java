@@ -2,8 +2,9 @@ package gui.analyticsPage;
 
 import java.time.YearMonth;
 import java.util.Map;
+
 import controllers.AnalyticsPageController;
-import gui.PostCard;
+import gui.commonComponents.PostCard;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
@@ -20,18 +21,18 @@ import javafx.scene.text.Text;
 public class ReportDisplay extends ScrollPane {
 	
 	private AnalyticsPageController controller;
-	public VBox vbox;
-	public LineChart<Number, Number> lineChart;
-	public NumberAxis xAxis;
-	public NumberAxis yAxis;
-	public XYChart.Series<Number, Number> series;
-	public TilePane tilePane;
-	public VBox mostLikedPostTile;
-	public VBox leastLikedPostTile;
-	public VBox mostCommentedPostTile;
-	public VBox leastCommentedPostTile;
-	public HBox hbox;
-	public Text average;
+	VBox vbox;
+	LineChart<Number, Number> monthlyPostActivityChart;
+	NumberAxis xAxis;
+	NumberAxis yAxis;
+	XYChart.Series<Number, Number> series;
+	TilePane engagementSnapshotTilePane;
+	VBox mostLikedPostTile;
+	VBox leastLikedPostTile;
+	VBox mostCommentedPostTile;
+	VBox leastCommentedPostTile;
+	HBox dailyAveragePostCountText;
+	Text average;
 	
 	public ReportDisplay(AnalyticsPageController controller) {
 		this.controller = controller;
@@ -46,16 +47,16 @@ public class ReportDisplay extends ScrollPane {
 		this.setStyle("-fx-background: #f9f9f9;");
 		
 		setupVBox();
-		setupHBox();
-		setupLineChart();
-		setupTilePane();
+		setupDailyAveragePostCountText();
+		setupMonthlyPostActivityChart();
+		setupEngagementSnapshotTilePane();
 		
 		this.setVisible(false);
 	}
 	
 	private void layoutComponents() {
 		this.setContent(vbox);
-		vbox.getChildren().addAll(lineChart, hbox, tilePane);
+		vbox.getChildren().addAll(monthlyPostActivityChart, dailyAveragePostCountText, engagementSnapshotTilePane);
 	}
 	
 	private void setupVBox() {
@@ -64,39 +65,21 @@ public class ReportDisplay extends ScrollPane {
 		vbox.setPadding(new Insets(60, 65, 60, 65));
 	}
 	
-	private void setupHBox() {
-		hbox = new HBox(5);
-		hbox.setAlignment(Pos.CENTER);
-
+	private void setupDailyAveragePostCountText() {
 		Text text = new Text("Numero medio di contenuti postati:");
-		text.setStyle("-fx-font-family: 'Product Sans'; -fx-font-size: 16; -fx-fill: #0e5460; -fx-font-weight: bold;");
+		text.setStyle(
+				"-fx-font-family: 'Product Sans'; -fx-font-size: 16;" + 
+				"-fx-fill: #0e5460; -fx-font-weight: bold;"
+		);
 
 		average = new Text();
 		average.setStyle("-fx-font-family: 'Product Sans'; -fx-font-size: 16; -fx-fill: black;");
 		
-		hbox.getChildren().addAll(text, average);
+		dailyAveragePostCountText = new HBox(5, text, average);
+		dailyAveragePostCountText.setAlignment(Pos.CENTER);
 	}
 	
-	private void setupTilePane() {
-		tilePane = new TilePane();
-		tilePane.setAlignment(Pos.CENTER);
-		tilePane.setOrientation(Orientation.HORIZONTAL);
-		tilePane.setHgap(50);
-		tilePane.setVgap(50);
-		tilePane.setPrefColumns(2);
-	}
-
-	public void displayReport() {
-		populateChart();
-		tilePane.getChildren().clear();
-		addMostLikedPostTile();
-		addLeastLikedPostTile();
-		addMostCommentedPostTile();
-		addLeastCommentedPostTile();
-		addDailyNewPostsAverage();
-	}
-
-	private void setupLineChart() {
+	private void setupMonthlyPostActivityChart() {
 		xAxis = new NumberAxis(1, 0, 1);
 		xAxis.setLabel("Giorni del mese");
 		xAxis.setMinorTickVisible(false);
@@ -104,19 +87,34 @@ public class ReportDisplay extends ScrollPane {
 		yAxis = new NumberAxis(0, 50, 5);
 		yAxis.setLabel("Numero di post");
 
-		lineChart = new LineChart<>(xAxis, yAxis);
-		lineChart.setTitle("Andamento mensile dei post");
-		lineChart.setPadding(new Insets(0, 125, -50, 80));
-		lineChart.setPrefHeight(245);
-		lineChart.setLegendVisible(false);
-		lineChart.getStylesheets().add(
+		monthlyPostActivityChart = new LineChart<>(xAxis, yAxis);
+		monthlyPostActivityChart.setTitle("Andamento mensile dei post");
+		monthlyPostActivityChart.setPadding(new Insets(0, 125, -50, 80));
+		monthlyPostActivityChart.setPrefHeight(245);
+		monthlyPostActivityChart.setLegendVisible(false);
+		monthlyPostActivityChart.getStylesheets().add(
 				ReportDisplay.class.getResource("/css/lineChartStyle.css").toExternalForm());
 
 		series = new XYChart.Series<>();
 
-		lineChart.getData().add(series);
+		monthlyPostActivityChart.getData().add(series);
+	}
+	
+	private void setupEngagementSnapshotTilePane() {
+		engagementSnapshotTilePane = new TilePane();
+		engagementSnapshotTilePane.setAlignment(Pos.CENTER);
+		engagementSnapshotTilePane.setOrientation(Orientation.HORIZONTAL);
+		engagementSnapshotTilePane.setHgap(50);
+		engagementSnapshotTilePane.setVgap(50);
+		engagementSnapshotTilePane.setPrefColumns(2);
 	}
 
+	public void displayReport() {
+		populateChart();
+		setDailyAveragePostCount();
+		populateEngagementSnapshotTilePane();
+	}
+	
 	private void populateChart() {
 		YearMonth yearMonth = YearMonth.of(controller.selectedYear, controller.selectedMonth);
 		int numberOfDaysInMonth = yearMonth.lengthOfMonth();
@@ -135,7 +133,7 @@ public class ReportDisplay extends ScrollPane {
 		}
 	}
 
-	private void addDailyNewPostsAverage() {
+	private void setDailyAveragePostCount() {
 		int newPostsAverage = (int) controller.calculateAveragePosts();
 		if (newPostsAverage == 1) {
 			average.setText(newPostsAverage + " nuovo post al giorno");
@@ -143,70 +141,42 @@ public class ReportDisplay extends ScrollPane {
 			average.setText(newPostsAverage + " nuovi post al giorno");
 		}
 	}
+	
+	private void populateEngagementSnapshotTilePane() {
+		engagementSnapshotTilePane.getChildren().clear();
+		addMostLikedPostTile();
+		addLeastLikedPostTile();
+		addMostCommentedPostTile();
+		addLeastCommentedPostTile();
+	}
 
 	private void addMostLikedPostTile() {
-		PostCard mostLikedPostCard = null;
-		
-		controller.getMostLikedPostOfGroupInMonthYear();
-		
-		if (controller.mostLikedPost != null) {
-			mostLikedPostCard = new PostCard(controller.mostLikedPost);
-			mostLikedPostCard.displayLikeCount(controller.highestLikeCount);
-		}
-		
+		PostCard mostLikedPostCard = controller.getMostLikedPostOfGroupInMonthYear();
 		mostLikedPostTile = createReportTile("Post con più like:", mostLikedPostCard);
-
-		tilePane.getChildren().add(mostLikedPostTile);
+		engagementSnapshotTilePane.getChildren().add(mostLikedPostTile);
 	}
 	
 	private void addLeastLikedPostTile() {
-		PostCard leastLikedPostCard = null;
-		
-		controller.getLeastLikedPostOfGroupInMonthYear();
-		
-		if (controller.leastLikedPost != null) {
-			leastLikedPostCard = new PostCard(controller.leastLikedPost);
-			leastLikedPostCard.displayLikeCount(controller.lowestLikeCount);
-		}
-
+		PostCard leastLikedPostCard = controller.getLeastLikedPostOfGroupInMonthYear();
 		leastLikedPostTile = createReportTile("Post con meno like:", leastLikedPostCard);
-		
-		tilePane.getChildren().add(leastLikedPostTile);
+		engagementSnapshotTilePane.getChildren().add(leastLikedPostTile);
 	}
 
 	private void addMostCommentedPostTile() {
-		PostCard mostCommentedPostCard = null;
-		
-		controller.getMostCommentedPostOfGroupInMonthYear();	
-		
-		if (controller.mostCommentedPost != null) {
-			mostCommentedPostCard = new PostCard(controller.mostCommentedPost);
-			mostCommentedPostCard.displayCommentsCount(controller.highestCommentsCount);
-		}
-
+		PostCard mostCommentedPostCard = controller.getMostCommentedPostOfGroupInMonthYear();	
 		mostCommentedPostTile = createReportTile("Post con più commenti:", mostCommentedPostCard);
-		
-		tilePane.getChildren().add(mostCommentedPostTile);
+		engagementSnapshotTilePane.getChildren().add(mostCommentedPostTile);
 	}
 	
 	private void addLeastCommentedPostTile() {
-		PostCard leastCommentedPostCard = null;
-		
-		controller.getLeastCommentedPostOfGroupInMonthYear();	
-		
-		if (controller.leastCommentedPost != null) {
-			leastCommentedPostCard = new PostCard(controller.leastCommentedPost);
-			leastCommentedPostCard.displayCommentsCount(controller.lowestCommentsCount);
-		}
-			
+		PostCard leastCommentedPostCard = controller.getLeastCommentedPostOfGroupInMonthYear();	
 		leastCommentedPostTile = createReportTile("Post con meno commenti:", leastCommentedPostCard);
-		
-		tilePane.getChildren().add(leastCommentedPostTile);
+		engagementSnapshotTilePane.getChildren().add(leastCommentedPostTile);
 	}
 
 	private VBox createReportTile(String description, PostCard postCard) {
 		VBox reportTile = new VBox(10);
-		reportTile.setPadding(new Insets(15, 10, 15, 10));
+		reportTile.setPadding(new Insets(15, 15, 15, 15));
 		reportTile.setPrefWidth(350);
 		reportTile.setStyle(
 				"-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, white , #f9f9ff);" +

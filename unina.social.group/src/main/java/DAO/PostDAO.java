@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 
 import model.Post;
-import util.PgDatabaseConnector;
 
 public class PostDAO {
 	
@@ -22,6 +21,40 @@ public class PostDAO {
 	public PostDAO() {
 		dbConnector = new PgDatabaseConnector();
 	}
+	
+	public boolean insert(Post post) {
+        connection = PgDatabaseConnector.getConnection();
+		if (connection == null) {
+        	return false;
+        }
+        
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        
+    	try {
+            String cmd = 
+            		"INSERT INTO Post (idGruppo, usernameAutore, dataOraPubblicazione, testo)"
+         		       + "VALUES (?, ?, now(), ?) RETURNING idPost";
+            
+    		pstmt = connection.prepareStatement(cmd);
+            pstmt.setInt(1, Integer.parseInt(post.getGroup().getId()));
+            pstmt.setString(2, post.getAuthor().getUsername());
+            pstmt.setString(3, post.getText());
+            
+            rs = pstmt.executeQuery(); 
+            
+            if (rs.next()) {
+            	post.setId(String.valueOf(rs.getInt("idPost")));
+                return true;
+            }
+    	} catch (SQLException e) {
+    		e.printStackTrace();
+    	} finally {
+			dbConnector.closeResources(rs, pstmt, connection);;
+    	}
+    	
+    	return false;
+    }
 	
 	public Object[] getMostCommentedPostOfGroupInMonthYear(String groupId, int month, int year) {
 		Object[] postAndCommentCount = null;
@@ -270,25 +303,53 @@ public class PostDAO {
 		return postsPerDay;
 	}
 	
+	public List<Post> getAllPostsOfGroup(String idGruppo) {
+		List<Post> posts = new ArrayList<>();
+		
+        connection = PgDatabaseConnector.getConnection();
+		if (connection == null) {
+			return posts;
+		}
+		
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+		
+		try {
+			String cmd = 
+					"SELECT * " +
+					"FROM Post " +
+					"WHERE idGruppo = ? " +
+					"ORDER BY dataOraPubblicazione DESC";
+			
+			pstmt = connection.prepareStatement(cmd);
+            pstmt.setInt(1, Integer.parseInt(idGruppo));
+            
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				posts.add(createPost(rs));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			dbConnector.closeResources(rs, pstmt, connection);
+		}
+		
+		return posts;
+	}
+	
 	private Post createPost(ResultSet rs) {
-		GruppoDAO gruppoDAO = new GruppoDAO();
-		UtenteDAO utenteDAO = new UtenteDAO();
-		List<String> urlImages = new ArrayList<>();
+		GroupDAO gruppoDAO = new GroupDAO();
+		UserDAO utenteDAO = new UserDAO();
 		Post post = null;
 		
 		try {
-			for (int i=1; i<=5; i++) {
-				urlImages.add(rs.getString("urlFoto" + i));
-			}
-			
 			post = new Post(
 					String.valueOf(rs.getInt("idPost")),
-					gruppoDAO.getById(String.valueOf(rs.getInt("idGruppo"))),
-					utenteDAO.getById(String.valueOf(rs.getInt("idAutore"))),
-					rs.getTimestamp("dataOraPubblicazione").toLocalDateTime(),
 					rs.getString("testo"),
-					urlImages,				
-					rs.getString("tipo")
+					rs.getTimestamp("dataOraPubblicazione").toLocalDateTime(),
+					gruppoDAO.getById(String.valueOf(rs.getInt("idGruppo"))),
+					utenteDAO.getByUsername(rs.getString("usernameAutore"))
 			);
 		} catch (Exception e) {
 			e.printStackTrace();

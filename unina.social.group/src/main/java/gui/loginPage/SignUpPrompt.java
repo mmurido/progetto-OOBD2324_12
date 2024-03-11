@@ -8,8 +8,8 @@ import javafx.scene.text.Text;
 
 public class SignUpPrompt extends VBox {
 	
-	private Text promptText;
-	private Hyperlink signUpHyperlink;
+	Text promptText;
+	Hyperlink signUpHyperlink;
 
     public SignUpPrompt() {
         initializeComponents();
@@ -44,15 +44,7 @@ public class SignUpPrompt extends VBox {
         });
         
         signUpHyperlink.setOnMouseClicked(e -> {
-//            SignUpPage signUpPage = new SignUpPage();
-//            Scene nextScene;
-//			try {
-//				nextScene = signUpPage.getScene(primaryStage);
-//				primaryStage.setScene(nextScene);
-//				primaryStage.centerOnScreen();
-//			} catch (Exception exception) {
-//				exception.printStackTrace();
-//			}
+
         });
     }
 }

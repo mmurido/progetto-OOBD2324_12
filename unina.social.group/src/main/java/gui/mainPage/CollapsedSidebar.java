@@ -1,6 +1,8 @@
 package gui.mainPage;
 
-import gui.IconUtils;
+import controllers.Navigation;
+import gui.commonComponents.IconUtils;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
@@ -9,16 +11,16 @@ import javafx.scene.shape.Line;
 
 public class CollapsedSidebar extends AnchorPane {
 	
-	public VBox navigationButtonsContainer;
-	public NavigationButton homeButton;
-	public NavigationButton searchButton;
-	public NavigationButton notificationsButton;
-	public NavigationButton messagesButton;
-	public NavigationButton settingsButton;
-	public NavigationButton analyticsButton;
-	public SidebarButton logoutButton;
-	public SidebarButton expandButton;
-	public Line line;
+	VBox navigationButtonsContainer;
+	NavigationButton homeButton;
+	NavigationButton searchButton;
+	NavigationButton notificationsButton;
+	NavigationButton messagesButton;
+	NavigationButton settingsButton;
+	NavigationButton analyticsButton;
+	SidebarButton logoutButton;
+	SidebarButton expandButton;
+	Line line;
 	
 	private static final String SIDEBAR_STYLE = 
 			"-fx-background-color: #0e5460; -fx-background-radius: 10;" +
@@ -27,6 +29,7 @@ public class CollapsedSidebar extends AnchorPane {
     public CollapsedSidebar() {
         initializeComponents();
         layoutComponents();
+        setButtonsBehavior();
     }
 
     private void initializeComponents() {
@@ -83,6 +86,34 @@ public class CollapsedSidebar extends AnchorPane {
 		navigationButtonsContainer.getChildren().addAll(
 				homeButton, searchButton, notificationsButton, 
 				messagesButton, settingsButton, analyticsButton);
+    }
+    
+    private void setButtonsBehavior() {
+   		homeButton.setOnMouseClicked(e -> {
+    		Navigation.navigateToHomepage();
+    	});
+   		
+    	searchButton.setOnMouseClicked(e -> {
+    		Navigation.navigateToSearchPage();
+    	});
+    		
+    	analyticsButton.setOnMouseClicked(e -> {
+    		Navigation.navigateToAnalyticsPage();
+    	});
+    	
+    	logoutButton.setOnMouseClicked(e -> {
+    		Navigation.navigateToLoginPage();
+    	});
+
+    	setBehaviorForNotImplementedButton(messagesButton);
+    	setBehaviorForNotImplementedButton(notificationsButton);
+    	setBehaviorForNotImplementedButton(settingsButton);
+    }
+    
+    private void setBehaviorForNotImplementedButton(ToggleButton button) {
+		button.setOnMouseClicked(e -> {
+			Navigation.navigateToUnderConstructionPage();
+		});
     }
 
 }

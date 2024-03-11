@@ -1,7 +1,7 @@
 package gui.mainPage;
 
 import controllers.UserSession;
-import gui.IconUtils;
+import gui.commonComponents.IconUtils;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.image.ImageView;
@@ -13,8 +13,8 @@ import javafx.scene.text.Text;
 
 public class SidebarBottomSection extends HBox {
 	
-	public HBox profileBox;
-	public SidebarButton logoutButton;
+	HBox profileBox;
+	SidebarButton logoutButton;
 	
 	static final String PROFILE_BOX_STYLE = 
 			"-fx-background-color: #136472; -fx-background-radius: 10";
@@ -72,11 +72,11 @@ public class SidebarBottomSection extends HBox {
 		userInfoBox.setPadding(new Insets(3, 0, 0, 0));
 
 		Text firstAndLastName = new Text(
-				UserSession.getLoggedUser().getNome() + " " + 
-				UserSession.getLoggedUser().getCognome());
+				UserSession.getLoggedUserName() + " " + 
+				UserSession.getLoggedUserSurname());
 		firstAndLastName.setStyle(TEXT_STYLE + " -fx-font-weight: bold;");
 
-		Text username = new Text(UserSession.getLoggedUser().getUsername());
+		Text username = new Text(UserSession.getLoggedUserUsername());
 		username.setStyle(TEXT_STYLE);
 
 		firstAndLastName.setMouseTransparent(true);

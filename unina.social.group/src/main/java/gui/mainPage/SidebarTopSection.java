@@ -1,6 +1,6 @@
 package gui.mainPage;
 
-import gui.IconUtils;
+import gui.commonComponents.IconUtils;
 import javafx.geometry.Insets;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
@@ -9,8 +9,8 @@ import javafx.scene.text.Text;
 
 public class SidebarTopSection extends HBox {
 	
-	public Text logo;
-	public SidebarButton collapseButton;
+	Text logo;
+	SidebarButton collapseButton;
 	
 	 public SidebarTopSection() {
         initializeComponents();

@@ -1,6 +1,7 @@
 package gui.analyticsPage;
 
 import controllers.AnalyticsPageController;
+import javafx.collections.ObservableList;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
@@ -9,16 +10,20 @@ import javafx.scene.text.Text;
 public class AnalyticsPage extends BorderPane {
 	
 	private AnalyticsPageController controller;
-	public AnchorPane topSection;
-	public StackPane banner;
-	public Text title;
-	public AnalyticsFilterBox filterBox;
-	public ReportDisplay reportDisplay;
+	AnchorPane topSection;
+	StackPane banner;
+	Text title;
+	AnalyticsFilterBox filterBox;
+	ReportDisplay reportDisplay;
 	
 	public AnalyticsPage() {
 		this.controller = new AnalyticsPageController(this);
 		initializeComponents();
 		layoutComponents();
+		
+		controller.getGroupOptions();
+		setBehaviorForClearChoicesButton();
+		setBehaviorForShowReportButton();
 	}
 
 	private void initializeComponents() {
@@ -28,7 +33,6 @@ public class AnalyticsPage extends BorderPane {
 		setupTitle();
 		filterBox = new AnalyticsFilterBox(controller);
 		reportDisplay = new ReportDisplay(controller);
-		controller.setItemsIntoGroupChoiceBox();
 	}
 	
 	private void layoutComponents() {
@@ -63,5 +67,31 @@ public class AnalyticsPage extends BorderPane {
 				"-fx-fill: white; -fx-font-weight: bold;"
 		);
     }
+    
+    public void setGroupOptions(ObservableList<String> groupOptions) {
+		filterBox.groupChoiceBox.setItems(groupOptions);
+	}
+    
+    public void setYearOptions(ObservableList<String> yearOptions) {
+		filterBox.yearChoiceBox.setItems(yearOptions);
+	}
+    
+    public void setMonthOptions(ObservableList<String> monthOptions) {
+		filterBox.monthChoiceBox.setItems(monthOptions);
+	}
+    
+    private void setBehaviorForClearChoicesButton() {
+    	filterBox.clearChoicesButton.setOnMouseClicked(event -> {
+    		filterBox.reset();
+    		reportDisplay.setVisible(false);
+    	});
+    }
+    
+	private void setBehaviorForShowReportButton() {
+		filterBox.showReportButton.setOnMouseClicked(event -> {
+			reportDisplay.displayReport();
+			reportDisplay.setVisible(true);
+		});
+	}
 
 }

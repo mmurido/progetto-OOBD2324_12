@@ -1,7 +1,9 @@
 package gui.searchPage;
 
 import java.util.List;
-import gui.IconUtils;
+
+import gui.commonComponents.GroupCard;
+import gui.commonComponents.IconUtils;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
@@ -12,21 +14,29 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import model.Gruppo;
 
 public class ResultsDisplaySection extends AnchorPane {
 	
-	public TilePane resultsTilePane;
-	public ScrollPane scrollPane;
+	TilePane resultsTilePane;
+	ScrollPane scrollPane;
 	
 	public ResultsDisplaySection() {
 		initializeComponents();
+		layoutComponents();
 	}
 	
 	private void initializeComponents() {
 		this.setStyle("-fx-background-color: #f6f6f6; -fx-border-color: #bcbcbc;");
 		setupScrollPane();
 		setupResultsTilePane();
+	}
+	
+	private void layoutComponents() {
+		AnchorPane.setTopAnchor(scrollPane, 0.0);
+		AnchorPane.setLeftAnchor(scrollPane, 0.0);
+		AnchorPane.setRightAnchor(scrollPane, 0.0);
+		AnchorPane.setBottomAnchor(scrollPane, 0.0);
+		
 		scrollPane.setContent(resultsTilePane);
 	}
 	
@@ -37,11 +47,6 @@ public class ResultsDisplaySection extends AnchorPane {
 
 		String cssPath = SearchPage.class.getResource("/css/scrollPaneStyle.css").toExternalForm();
 		scrollPane.getStylesheets().add(cssPath);
-
-		AnchorPane.setTopAnchor(scrollPane, 0.0);
-		AnchorPane.setLeftAnchor(scrollPane, 0.0);
-		AnchorPane.setRightAnchor(scrollPane, 0.0);
-		AnchorPane.setBottomAnchor(scrollPane, 0.0);
 	}
 	
 	private void setupResultsTilePane() {
@@ -52,6 +57,16 @@ public class ResultsDisplaySection extends AnchorPane {
 		resultsTilePane.setVgap(20);
 		resultsTilePane.setPrefColumns(3);
 		resultsTilePane.prefWidthProperty().bind(scrollPane.widthProperty());
+	}
+	
+	public void displayResults(List<GroupCard> results) {
+		getChildren().clear();
+		getChildren().add(scrollPane);
+		resultsTilePane.getChildren().clear();
+		
+		for (GroupCard groupCard : results) {
+			resultsTilePane.getChildren().add(groupCard);
+		}
 	}
 
 	public void displayNoResultsMessage() {
@@ -86,14 +101,4 @@ public class ResultsDisplaySection extends AnchorPane {
 		this.getChildren().add(stackPane);
 	}
 
-	public void displaySearchResults(List<Gruppo> searchResults) {
-		resultsTilePane.getChildren().clear();
-		this.getChildren().clear();
-		this.getChildren().add(scrollPane);
-
-		for (Gruppo group : searchResults) {
-			GroupCard groupCard = new GroupCard(group);
-			resultsTilePane.getChildren().add(groupCard);
-		}
-	}
 }

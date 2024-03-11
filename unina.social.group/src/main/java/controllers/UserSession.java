@@ -1,16 +1,28 @@
 package controllers;
 
-import model.Utente;
+import model.User;
 
 public class UserSession {
 
-	private static Utente loggedUser;
+	private static User loggedUser;
 
-	public static void setLoggedUser(Utente user) {
+	public static void setLoggedUser(User user) {
 		loggedUser = user;
 	}
 	
-	public static Utente getLoggedUser() {
+	public static User getLoggedUser() {
 		return loggedUser;
+	}
+	
+	public static String getLoggedUserUsername() {
+		return loggedUser.getUsername();
+	}
+	
+	public static String getLoggedUserName() {
+		return loggedUser.getName();
+	}
+	
+	public static String getLoggedUserSurname() {
+		return loggedUser.getSurname();
 	}
 }

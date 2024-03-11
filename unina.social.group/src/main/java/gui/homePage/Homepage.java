@@ -1,29 +1,40 @@
 package gui.homePage;
 
+import java.util.List;
+
+import controllers.HomepageController;
+import gui.commonComponents.GroupCard;
 import javafx.geometry.Insets;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
-import controllers.HomepageController;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 public class Homepage extends BorderPane {
 	
 	private HomepageController controller;
-	public AnchorPane topSection;
-	public StackPane banner;
-	public Text title;
-	public BorderPane innerBorderPane;
-	public VBox rightSection;
-	public GroupDisplaySection groupDisplaySection;
-	public SearchAndSortBox searchAndSortBox;
-	public SuggestedGroupsSection suggestedGroupsSection;
+	AnchorPane topSection;
+	StackPane banner;
+	Text title;
+	BorderPane innerBorderPane;
+	VBox rightSection;
+	GroupDisplaySection groupDisplaySection;
+	SearchAndSortBox searchAndSortBox;
+	SuggestedGroupsSection suggestedGroupsSection;
 
 	public Homepage() {
 		this.controller = new HomepageController(this);
 		initializeComponents();
 		layoutComponents();
+		controller.getAllUserGroupsGroupCards();
+		controller.getSuggestedGroupsGroupCards();
+		configureSearchBehavior();
+		handleDeleteButtonClicked();
+		handleSortAZButtonClicked();
+		handleSortZAButtonClicked();		
+		adjustContentToPageSize();
 	}
 	
 	private void initializeComponents() {
@@ -32,19 +43,14 @@ public class Homepage extends BorderPane {
 		setupTopSection();
 
 		innerBorderPane = new BorderPane();
-		groupDisplaySection = new GroupDisplaySection();
-
-		rightSection = new VBox(30);
-		BorderPane.setMargin(rightSection, new Insets(20, 30, 20, 30));
-
-		searchAndSortBox = new SearchAndSortBox();
-		suggestedGroupsSection = new SuggestedGroupsSection();
-
-		configureSearchBehavior();
-		handleSortButtonClicked();
-		handleDeleteButtonClicked();
 		
-		adjustContentToPageSize();
+		groupDisplaySection = new GroupDisplaySection(controller);
+		
+		rightSection = new VBox(30);
+		
+		searchAndSortBox = new SearchAndSortBox();
+		
+		suggestedGroupsSection = new SuggestedGroupsSection();
 	}
 	
 	private void layoutComponents() {
@@ -59,6 +65,8 @@ public class Homepage extends BorderPane {
 		
 		AnchorPane.setTopAnchor(title, 20.0);
 		AnchorPane.setLeftAnchor(title, 130.0);
+		
+		BorderPane.setMargin(rightSection, new Insets(20, 30, 20, 30));
 		
 		topSection.getChildren().addAll(banner, title);
 		this.setTop(topSection);
@@ -81,7 +89,6 @@ public class Homepage extends BorderPane {
 		banner.setPrefSize(0, 80);
         banner.prefWidthProperty().bind(this.widthProperty());
 		banner.setStyle("-fx-background-color: #00958c");
-
     }
     
     private void setupTitle() {
@@ -92,26 +99,51 @@ public class Homepage extends BorderPane {
 		);
     }
     
-    private void handleSortButtonClicked() {
+    private void handleSortAZButtonClicked() {
 		searchAndSortBox.sortAZButton.setOnAction(event -> {
-			controller.onSortAZButtonClicked();
+            if (searchAndSortBox.sortAZButton.isSelected()) {
+    			controller.onSortAZButtonSelected();
+            } else {
+            	controller.onSortButtonUnselected();
+            }
 		});
-		
+    }
+    
+    private void handleSortZAButtonClicked() {
 		searchAndSortBox.sortZAButton.setOnAction(event -> {
-			controller.onSortZAButtonClicked();
+            if (searchAndSortBox.sortZAButton.isSelected()) {
+    			controller.onSortZAButtonSelected();
+            } else {
+            	controller.onSortButtonUnselected();
+            }
 		});
     }
     
     private void configureSearchBehavior() {
         searchAndSortBox.searchField.setOnAction(event -> {
-            controller.handleSearch();
+    		String textEntered = searchAndSortBox.searchField.getText();
+    		if (!textEntered.isEmpty()) {
+    			searchAndSortBox.searchField.clear();
+    			searchAndSortBox.searchField.setEditable(false);
+    			searchAndSortBox.toggleGroup.getToggles().forEach(
+    					toggle -> ((ToggleButton) toggle).setSelected(false));
+    			searchAndSortBox.highlightText(textEntered);
+    			searchAndSortBox.addDeleteButton();
+    			
+    			controller.handleSearch(textEntered);
+    		}
         });
     }
     
     private void handleDeleteButtonClicked() {
 		searchAndSortBox.deleteButton.setOnAction(e -> {
-			System.out.println("cliccato");
-			controller.onDeleteButtonClicked();
+			searchAndSortBox.searchBar.getChildren().removeAll(
+				searchAndSortBox.highlightedText, 
+				searchAndSortBox.deleteButton
+			);
+				
+			searchAndSortBox.searchField.setEditable(true);
+			controller.getAllUserGroupsGroupCards();		
 		});
     }
     
@@ -126,4 +158,16 @@ public class Homepage extends BorderPane {
             }
         });
     }
+    
+    public void displayUserGroups(List<GroupCard> groupCardsToDisplay) {
+        for (GroupCard groupCard : groupCardsToDisplay) {
+        	groupCard.removeJoinGroupButton();
+        }
+    	groupDisplaySection.displayUserGroups(groupCardsToDisplay);
+    }
+    
+    public void displaySuggestedGroups(List<GroupCard> groupCardsToDisplay) {
+    	suggestedGroupsSection.displaySuggestedGroups(groupCardsToDisplay);
+    }
+
 }

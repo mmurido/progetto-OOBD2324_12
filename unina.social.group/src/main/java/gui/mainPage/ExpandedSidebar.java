@@ -1,6 +1,8 @@
 package gui.mainPage;
 
-import gui.IconUtils;
+import controllers.Navigation;
+import gui.commonComponents.IconUtils;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
@@ -10,17 +12,17 @@ import javafx.scene.shape.Rectangle;
 
 public class ExpandedSidebar extends AnchorPane {
 		
-	public SidebarTopSection topSection;
-	public VBox navigationButtonsContainer;
-	public NavigationButton homeButton;
-	public NavigationButton searchButton;
-	public NavigationButton notificationsButton;
-	public NavigationButton messagesButton;
-	public NavigationButton settingsButton;
-	public NavigationButton analyticsButton;
-	public Line line;
-	public SidebarBottomSection bottomSection;
-	public Rectangle slider;
+	SidebarTopSection topSection;
+	VBox navigationButtonsContainer;
+	NavigationButton homeButton;
+	NavigationButton searchButton;
+	NavigationButton notificationsButton;
+	NavigationButton messagesButton;
+	NavigationButton settingsButton;
+	NavigationButton analyticsButton;
+	Line line;
+	SidebarBottomSection bottomSection;
+	Rectangle slider;
 
 	private static final String SIDEBAR_STYLE =
 			"-fx-background-color: #0e5460; -fx-background-radius: 10;";
@@ -28,6 +30,7 @@ public class ExpandedSidebar extends AnchorPane {
 	public ExpandedSidebar() {
         initializeComponents();
         layoutComponents();
+        setButtonsBehavior();
 	}
 	
 	private void initializeComponents() {
@@ -87,5 +90,33 @@ public class ExpandedSidebar extends AnchorPane {
 		slider = new Rectangle(175, 0);
 		slider.setFill(Color.WHITE);
 	}
+	
+    private void setButtonsBehavior() {
+   		homeButton.setOnMouseClicked(e -> {
+    		Navigation.navigateToHomepage();
+    	});
+   		
+    	searchButton.setOnMouseClicked(e -> {
+    		Navigation.navigateToSearchPage();
+    	});
+    		
+    	analyticsButton.setOnMouseClicked(e -> {
+    		Navigation.navigateToAnalyticsPage();
+    	});
+    	
+    	bottomSection.logoutButton.setOnMouseClicked(e -> {
+    		Navigation.navigateToLoginPage();
+    	});
+
+    	setBehaviorForNotImplementedButton(messagesButton);
+    	setBehaviorForNotImplementedButton(notificationsButton);
+    	setBehaviorForNotImplementedButton(settingsButton);
+    }
+    
+    private void setBehaviorForNotImplementedButton(ToggleButton button) {
+		button.setOnMouseClicked(e -> {
+			Navigation.navigateToUnderConstructionPage();
+		});
+    }
 
 }

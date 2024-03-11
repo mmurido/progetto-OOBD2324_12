@@ -1,19 +1,16 @@
 package gui.mainPage;
 
-import gui.IconUtils;
-import javafx.geometry.Insets;
+import gui.commonComponents.IconUtils;
 import javafx.geometry.Pos;
-import javafx.scene.control.ButtonBase;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
-import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 
 public class SidebarButton extends ToggleButton {
 
-	public ImageView icon;
+	ImageView icon;
 	
 	static final String HIGHLIGHTED_BUTTON_STYLE = 
 			"-fx-background-color: #136472; -fx-background-radius: 10";

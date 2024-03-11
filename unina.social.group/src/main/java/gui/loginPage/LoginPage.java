@@ -1,9 +1,11 @@
 package gui.loginPage;
 
 import controllers.LoginPageController;
-import gui.Navigation;
-import gui.ShadowPane;
-import gui.WindowControls;
+import controllers.Navigation;
+
+import gui.commonComponents.ShadowPane;
+import gui.commonComponents.WindowControls;
+
 import javafx.application.Application;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
@@ -17,17 +19,17 @@ import javafx.stage.StageStyle;
 public class LoginPage extends Application {
 
 	private LoginPageController controller;
-	private Stage primaryStage;
-	private Scene scene;
-	private WindowControls windowControls;
-	private ShadowPane shadowPane;
-	private AnchorPane basePane;
-	private LoginPageHeading heading;
-	private LoginCredentialsSection credentialsSection;
-	private LoginButton loginButton;
-	private SignUpPrompt signUpPrompt;	
-    private double xOffset;
-    private double yOffset;
+	Stage primaryStage;
+	Scene scene;
+	WindowControls windowControls;
+	ShadowPane shadowPane;
+	AnchorPane basePane;
+	LoginPageHeading heading;
+	LoginCredentialsSection credentialsSection;
+	LoginButton loginButton;
+	SignUpPrompt signUpPrompt;	
+    double xOffset;
+    double yOffset;
 	
     public static void main(String[] args) {
         launch(args);

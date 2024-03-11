@@ -2,45 +2,24 @@ package controllers;
 
 import java.util.ArrayList;
 import java.util.List;
-import DAO.GruppoDAO;
+
+import DAO.GroupDAO;
+import gui.commonComponents.GroupCard;
 import gui.searchPage.SearchPage;
-import javafx.scene.control.ToggleButton;
-import model.Gruppo;
+import model.Group;
 
 public class SearchPageController {
 	
 	private SearchPage searchPage;
-	private GruppoDAO gruppoDAO;
+	private GroupDAO groupDAO;
 	
 	public SearchPageController(SearchPage searchPage) {
 		this.searchPage = searchPage;
-        this.gruppoDAO = new GruppoDAO();
-	}
-	
-	public void onEnterKeyPressed() {
-		handleSearch();
-	}
-	
-	private void handleSearch() {
-		String textEntered = searchPage.topSection.searchField.getText();
-	
-		if (!textEntered.isEmpty()) {
-			ToggleButton selectedFilter = 
-					(ToggleButton) searchPage.topSection.filterButtonsToggleGroup.getSelectedToggle();
-
-			if (selectedFilter == null) {
-				searchPage.topSection.pulsateFilterButtons();
-			} 
-			else {
-				performSearch(selectedFilter.getText(), textEntered);
-			}
-		}
+        this.groupDAO = new GroupDAO();
 	}
 
-	private void performSearch(String searchBy, String textEntered) {
-		searchPage.topSection.searchField.clear();
-		
-		List<Gruppo> searchResults = new ArrayList<>();
+	public void performSearch(String searchBy, String textEntered) {		
+		List<Group> searchResults = new ArrayList<>();
 	
 		if (searchBy.equals("nome")) {
 			searchResults = searchGroupsByName(textEntered);
@@ -50,18 +29,41 @@ public class SearchPageController {
 	    }
 	
 	    if (searchResults.isEmpty()) {
-	    	searchPage.resultsDisplaySection.displayNoResultsMessage();
+	    	searchPage.displayNoResultsMessage();
 	    } else {
-	    	searchPage.resultsDisplaySection.displaySearchResults(searchResults);
+	    	createGroupCardsToBeDisplayed(searchResults);
 	    }  
 	}
 	
-    public List<Gruppo> searchGroupsByName(String searchTerm) {
-        return gruppoDAO.getByName(searchTerm);
+    public List<Group> searchGroupsByName(String searchTerm) {
+        return groupDAO.getByName(searchTerm);
     }
     
-    public List<Gruppo> searchGroupsByTopic(String searchTerm) {
-        return gruppoDAO.getByTopic(searchTerm);
+    public List<Group> searchGroupsByTopic(String searchTerm) {
+        return groupDAO.getByTopic(searchTerm);
+    }
+	
+	private void createGroupCardsToBeDisplayed(List<Group> searchResults) {
+		List<GroupCard> groupCardsToBeDisplayed = new ArrayList<>();
+		
+		for (Group group : searchResults) {
+			GroupCard groupCard = createGroupCard(group);
+			groupCardsToBeDisplayed.add(groupCard);
+		}
+		
+		searchPage.displayResults(groupCardsToBeDisplayed);
+	}
+	
+    private GroupCard createGroupCard(Group group) {
+    	String groupId = group.getId();
+    	String groupName = group.getName();
+    	String groupTopic = group.getTopic();
+    	String groupDescription = group.getDescription();
+    	String groupOwnerUsername = group.getOwner().getUsername();
+    	
+    	GroupCard groupCard = new GroupCard(groupId, groupName, groupTopic, groupDescription, groupOwnerUsername);
+    	
+        return groupCard;
     }
 
 }

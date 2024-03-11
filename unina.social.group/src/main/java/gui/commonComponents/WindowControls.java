@@ -1,4 +1,4 @@
-package gui;
+package gui.commonComponents;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;

@@ -1,25 +1,24 @@
 package controllers;
 
-import DAO.UtenteDAO;
-import gui.Navigation;
+import DAO.UserDAO;
 import gui.loginPage.LoginPage;
-import model.Utente;
+import model.User;
 
 public class LoginPageController {
 	
-	private UtenteDAO utenteDAO;
+	private UserDAO userDAO;
 	private LoginPage loginPage;
 	
 	public LoginPageController(LoginPage loginPage) {
-		this.utenteDAO = new UtenteDAO();
+		this.userDAO = new UserDAO();
 		this.loginPage = loginPage;
 	}
 	
 	public void onLoginButtonClicked(String username, String password) {
-		boolean authenticated = utenteDAO.authenticate(username, password);
+		boolean authenticated = userDAO.authenticate(username, password);
 		
 		if (authenticated) {
-			Utente user = utenteDAO.getByUsername(username);
+			User user = userDAO.getByUsername(username);
 			UserSession.setLoggedUser(user);
 			Navigation.navigateToMainPage();
 		}

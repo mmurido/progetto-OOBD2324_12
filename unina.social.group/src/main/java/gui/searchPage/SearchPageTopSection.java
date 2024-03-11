@@ -1,6 +1,6 @@
 package gui.searchPage;
 
-import gui.IconUtils;
+import gui.commonComponents.IconUtils;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -20,16 +20,16 @@ import javafx.util.Duration;
 
 public class SearchPageTopSection extends AnchorPane {
 
-	public VBox container;
-	public StackPane banner;
-	public Text title;
-	public Text subtitle;
-	public StackPane searchBar;
-	public TextField searchField;
-	public HBox filterBox;
-	public ToggleGroup filterButtonsToggleGroup;
-	public ToggleButton nameFilterToggleButton;
-	public ToggleButton topicFilterToggleButton;
+	VBox container;
+	StackPane banner;
+	Text title;
+	Text subtitle;
+	StackPane searchBar;
+	TextField searchField;
+	HBox filterBox;
+	ToggleGroup filterButtonsToggleGroup;
+	ToggleButton nameFilterToggleButton;
+	ToggleButton topicFilterToggleButton;
 	
 	private static final String SEARCH_FIELD_STYLE= 
 			"-fx-background-radius: 20; -fx-background-color: #fbfbfb; -fx-border-color: #dbdbdb;" +

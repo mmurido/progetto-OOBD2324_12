@@ -1,6 +1,6 @@
 package gui.loginPage;
 
-import gui.IconUtils;
+import gui.commonComponents.IconUtils;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -14,13 +14,13 @@ import javafx.scene.text.Font;
 
 public class LoginCredentialsSection extends VBox {
 	
-    public Label usernameLabel;
-    public Label passwordLabel;
-    public TextField usernameField;
-    public TextField passwordField;
-    public PasswordField hashedPasswordField;
-    public VBox labeledUsernameField;
-    public VBox labeledPasswordField;
+    Label usernameLabel;
+    Label passwordLabel;
+    TextField usernameField;
+    TextField passwordField;
+    PasswordField hashedPasswordField;
+    VBox labeledUsernameField;
+    VBox labeledPasswordField;
     
     private String FIELD_STYLE = 
     		"-fx-focus-color: #faa905; -fx-faint-focus-color: rgba(246, 200, 107, 0.5);" + 
