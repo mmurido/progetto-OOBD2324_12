@@ -7,18 +7,16 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
-import util.PgDatabaseConnector;
-
-public class RichiestaDiAccessoDAO {
+public class JoinRequestDAO {
 
 	private Connection connection;
 	private PgDatabaseConnector dbConnector;
 	
-	public RichiestaDiAccessoDAO() {
+	public JoinRequestDAO() {
 		dbConnector = new PgDatabaseConnector();
 	}
 
-	public boolean insert(String idGruppo, String idMittente, String idDestinatario) {
+	public boolean insert(String groupId, String senderUsername, String recipientUsername) {
 		connection = PgDatabaseConnector.getConnection();
 		if (connection == null) {
 			return false;
@@ -29,13 +27,13 @@ public class RichiestaDiAccessoDAO {
 		try {
 			String cmd = 
 					"INSERT INTO RichiestaDiAccesso " +
-					"(idMittente, idDestinatario, idGruppo, dataOraInvio, stato, dataAccettazione) " +
+					"(usernameMittente, usernameDestinatario, idGruppo, dataOraInvio, stato, dataAccettazione) " +
 					"VALUES (?, ?, ?, ?, ?, ?)";
 			
 			pstmt = connection.prepareStatement(cmd);
-            pstmt.setInt(1, Integer.parseInt(idMittente));
-            pstmt.setInt(2, Integer.parseInt(idDestinatario));
-            pstmt.setInt(3, Integer.parseInt(idGruppo));
+            pstmt.setString(1, senderUsername);
+            pstmt.setString(2, recipientUsername);
+            pstmt.setInt(3, Integer.parseInt(groupId));
             pstmt.setTimestamp(4, Timestamp.valueOf(LocalDateTime.now()));
             pstmt.setString(5, "in_attesa");
             pstmt.setDate(6, null);
@@ -51,7 +49,7 @@ public class RichiestaDiAccessoDAO {
 		return false;
 	}
 
-	public boolean hasPendingAccessRequest(String idGruppo, String idMittente) {
+	public boolean hasPendingAccessRequest(String groupId, String senderUsername) {
 		connection = PgDatabaseConnector.getConnection();
 		if (connection == null) {
 			return false;
@@ -65,12 +63,12 @@ public class RichiestaDiAccessoDAO {
 					"SELECT * "+ 
 					"FROM RichiestaDiAccesso " +
 					"WHERE idGruppo = ? " +
-					"AND idMittente = ? " +
+					"AND usernameMittente = ? " +
 					"AND stato = 'in_attesa'";
 			
 			pstmt = connection.prepareStatement(cmd);
-            pstmt.setInt(1, Integer.parseInt(idGruppo));
-            pstmt.setInt(2, Integer.parseInt(idMittente));
+            pstmt.setInt(1, Integer.parseInt(groupId));
+            pstmt.setString(2, senderUsername);
             
 			rs = pstmt.executeQuery();
 

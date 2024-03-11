@@ -1,19 +1,23 @@
 package DAO;
 
-import java.sql.*;
-import model.Utente;
-import util.PgDatabaseConnector;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
-public class UtenteDAO{
+import model.User;
+
+public class UserDAO{
 	
 	private Connection connection;
 	private PgDatabaseConnector dbConnector;
 	
-	public UtenteDAO() {
+	public UserDAO() {
 		dbConnector = new PgDatabaseConnector();
 	}
 	
-	public boolean insert(Utente utente) {
+	public boolean insert(User user) {
         connection = PgDatabaseConnector.getConnection();
 		if (connection == null) {
         	return false;
@@ -23,24 +27,22 @@ public class UtenteDAO{
         ResultSet rs = null;
         
     	try {
-            String cmd = "INSERT INTO Utente (email, username, password, nome,"
-            		   + " cognome, dataNascita, dataIscrizione, tipo) "
-         		       + "VALUES (?, ?, ?, ?, ?, ?, ?, ?) RETURNING idUtente";
+            String cmd = 
+            		"INSERT INTO Utente (email, username, password, nome," +
+            		" cognome, dataNascita) VALUES (?, ?, ?, ?, ?, ?)";
             
     		pstmt = connection.prepareStatement(cmd);
-            pstmt.setString(1, utente.getEmail());
-            pstmt.setString(2, utente.getUsername());
-            pstmt.setString(3, utente.getPassword());
-            pstmt.setString(4, utente.getNome());
-            pstmt.setString(5, utente.getCognome());
-            pstmt.setDate(6, Date.valueOf(utente.getDataNascita()));  
-            pstmt.setDate(7, Date.valueOf(utente.getDataIscrizione()));
-            pstmt.setString(8, utente.getTipo());
+            pstmt.setString(1, user.getEmail());
+            pstmt.setString(2, user.getUsername());
+            pstmt.setString(3, user.getPassword());
+            pstmt.setString(4, user.getName());
+            pstmt.setString(5, user.getSurname());
+            pstmt.setDate(6, Date.valueOf(user.getBirthDate()));  
+
             
             rs = pstmt.executeQuery(); 
             
             if (rs.next()) {
-            	utente.setIdUtente(String.valueOf(rs.getInt("idUtente")));
                 return true;
             }
     	} catch (SQLException e) {
@@ -51,44 +53,9 @@ public class UtenteDAO{
     	
     	return false;
     }
-
-	public Utente getById(String id) {
-		Utente user = null;
-
-		connection = PgDatabaseConnector.getConnection();
-		if (connection == null) {
-			return user;
-		}
-
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-
-		try {
-			String cmd = 
-					"SELECT * " + 
-					"FROM Utente " + 
-					"WHERE idUtente = ?";
-
-			pstmt = connection.prepareStatement(cmd);
-			pstmt.setInt(1, Integer.parseInt(id));
-
-			rs = pstmt.executeQuery();
-
-			if (rs.next()) {
-				user = createUser(rs);
-				printUser(user);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			dbConnector.closeResources(rs, pstmt, connection);
-		}
-
-		return user;
-	}
 	    
-	public Utente getByUsername(String username) {
-		Utente user = null;
+	public User getByUsername(String username) {
+		User user = null;
 
 		connection = PgDatabaseConnector.getConnection();
 		if (connection == null) {
@@ -111,21 +78,19 @@ public class UtenteDAO{
 
 			if (rs.next()) {
 				user = createUser(rs);
-				printUser(user);
+//				printUser(user);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			;
 		} finally {
 			dbConnector.closeResources(rs, pstmt, connection);
-			;
 		}
 
 		return user;
 	}
 
-	public Utente getByEmail(String email) {
-		Utente user = null;
+	public User getByEmail(String email) {
+		User user = null;
 
 		connection = PgDatabaseConnector.getConnection();
 		if (connection == null) {
@@ -152,10 +117,8 @@ public class UtenteDAO{
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			;
 		} finally {
 			dbConnector.closeResources(rs, pstmt, connection);
-			;
 		}
 
 		return user;
@@ -175,7 +138,7 @@ public class UtenteDAO{
 					"SELECT * " + 
 			        "FROM Utente " + 
 					"WHERE username = ? " + 
-			        "AND password=?";
+			        "AND password = ?";
 
 			pstmt = connection.prepareStatement(cmd);
 			pstmt.setString(1, username);
@@ -195,20 +158,17 @@ public class UtenteDAO{
 		return false;
 	}
 
-	private Utente createUser(ResultSet rs) {
-		Utente user = null;
+	private User createUser(ResultSet rs) {
+		User user = null;
 
 		try {
-			user = new Utente(
-					String.valueOf(rs.getInt("idUtente")), 
+			user = new User(
 					rs.getString("email"), 
 					rs.getString("username"),
 					rs.getString("password"), 
 					rs.getString("nome"), 
 					rs.getString("cognome"),
-					rs.getDate("dataNascita").toLocalDate(), 
-					rs.getDate("dataIscrizione").toLocalDate(),
-					rs.getString("tipo"));
+					rs.getDate("dataNascita").toLocalDate() );
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -216,16 +176,14 @@ public class UtenteDAO{
 		return user;
 	}
 
-	private void printUser(Utente user) {
+	private void printUser(User user) {
 		System.out.println(
 				"email: " + user.getEmail() + 
 				"\nusername: " + user.getUsername() + 
 				"\npassword: " + user.getPassword() + 
-				"\nnome: " + user.getNome() + 
-				"\ncognome: " + user.getCognome() +
-				"\ndataNascita: " + user.getDataNascita() + 
-				"\ndataIscrizione: " + user.getDataIscrizione() +
-				"\ntipo: " + user.getTipo() + 
+				"\nnome: " + user.getName() + 
+				"\ncognome: " + user.getSurname() +
+				"\ndataNascita: " + user.getBirthDate() + 
 				"\n");
 	}
 }

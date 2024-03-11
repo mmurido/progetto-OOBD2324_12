@@ -3,36 +3,22 @@ package model;
 import java.time.LocalDate;
 
 public class Like {
+	
     private Post post;
-    private Utente utente;
-    private LocalDate data;
-
-    public Like(Post post, Utente utente) {
-        this.post = post;
-        this.utente = utente;
-    }
-
-    public Post getPost() {
-        return post;
-    }
-
-    public Utente getUtente() {
-        return utente;
-    }
+    private User user;
+    private LocalDate date;
     
-    public LocalDate getData() {
-    	return data;
-    }
+	public Like(Post post, User user, LocalDate date) {
+		this.post = post;
+		this.user = user;
+		this.date = date;
+	}
 
-    public void setPost(Post post) {
-        this.post = post;
-    }
-    
-    public void setUtente(Utente utente) {
-        this.utente = utente;
-    }
-    
-    public void setLike(LocalDate data) {
-    	this.data = data;
-    }
+	public Post getPost() { return post; }
+	public User getUser() { return user; }
+	public LocalDate getDate() { return date; }
+
+	public void setPost(Post post) { this.post = post; }
+	public void setUser(User user) { this.user = user; }
+	public void setDate(LocalDate date) { this.date = date; }	
 }

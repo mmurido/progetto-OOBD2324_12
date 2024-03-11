@@ -1,24 +1,25 @@
 package DAO;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import model.Gruppo;
-import model.Tema;
-import util.PgDatabaseConnector;
 
-public class GruppoDAO{
+import model.Group;
+
+public class GroupDAO{
 
 	private Connection connection;
 	private PgDatabaseConnector dbConnector;
-	private UtenteDAO utenteDAO;
 	
-	public GruppoDAO() {
+	public GroupDAO() {
 		dbConnector = new PgDatabaseConnector();
-		utenteDAO = new UtenteDAO();
 	}
 
-	public boolean insert(Gruppo group) {
+	public boolean insert(Group group) {
 		connection = PgDatabaseConnector.getConnection();
         if (connection == null) {
         	return false;
@@ -28,16 +29,16 @@ public class GruppoDAO{
         
     	try {
             String cmd = "INSERT INTO Gruppo (nome, dataOraCreazione, "
-            		   + "descrizione, tema, idOwner) "
+            		   + "descrizione, tema, usernameOwner) "
          		       + "VALUES (?, ?, ?, ?, ?) RETURNING idGruppo";
             
     		pstmt = connection.prepareStatement(cmd);
     		
-            pstmt.setString(1, group.getNome());
-            pstmt.setTimestamp(2, Timestamp.valueOf(group.getDataOraCreazione()));
-            pstmt.setString(3, group.getDescrizione());
-            pstmt.setString(4, group.getTema().getTema());
-            pstmt.setInt(5, Integer.valueOf(group.getOwner().getIdUtente()));
+            pstmt.setString(1, group.getName());
+            pstmt.setTimestamp(2, Timestamp.valueOf(group.getCreatedAt()));
+            pstmt.setString(3, group.getDescription());
+            pstmt.setString(4, group.getTopic());
+            pstmt.setInt(5, Integer.valueOf(group.getOwner().getUsername()));
             
             return pstmt.executeUpdate() > 0;
     	} catch (SQLException e) {
@@ -49,8 +50,8 @@ public class GruppoDAO{
     	return false;
     }
 
-	public Gruppo getById(String id) {
-		Gruppo group = null;
+	public Group getById(String id) {
+		Group group = null;
 		
         connection = PgDatabaseConnector.getConnection();
 		if (connection == null) {
@@ -82,8 +83,8 @@ public class GruppoDAO{
 		return group;
 	}
 	
-	public List<Gruppo> getByName(String name) {
-		List<Gruppo> searchResults = new ArrayList<>();
+	public List<Group> getByName(String name) {
+		List<Group> searchResults = new ArrayList<>();
 		
         connection = PgDatabaseConnector.getConnection();
 		if (connection == null) {
@@ -116,8 +117,8 @@ public class GruppoDAO{
 		return searchResults;
 	}
 	
-	public List<Gruppo> getByTopic(String topic) {
-		List<Gruppo> searchResults = new ArrayList<>();
+	public List<Group> getByTopic(String topic) {
+		List<Group> searchResults = new ArrayList<>();
 		
         connection = PgDatabaseConnector.getConnection();
 		if (connection == null) {
@@ -150,7 +151,7 @@ public class GruppoDAO{
 		return searchResults;
 	}
 	
-	public int geMemberCount(String idGruppo) {
+	public int getMemberCount(String groupId) {
 		int memberCount = 0;
 		
         connection = PgDatabaseConnector.getConnection();
@@ -169,7 +170,7 @@ public class GruppoDAO{
 					"WHERE G.idGruppo = ?";
 			
 			pstmt = connection.prepareStatement(cmd);
-            pstmt.setInt(1, Integer.parseInt(idGruppo));
+            pstmt.setInt(1, Integer.parseInt(groupId));
             
 			rs = pstmt.executeQuery();
 
@@ -185,7 +186,7 @@ public class GruppoDAO{
 		return memberCount;
 	}
 	
-	public int getPostCount(String idGruppo) {
+	public int getPostCount(String groupId) {
 		int postCount = 0;
 		
         connection = PgDatabaseConnector.getConnection();
@@ -204,7 +205,7 @@ public class GruppoDAO{
 					"WHERE G.idGruppo = ?";
 			
 			pstmt = connection.prepareStatement(cmd);
-            pstmt.setInt(1, Integer.parseInt(idGruppo));
+            pstmt.setInt(1, Integer.parseInt(groupId));
             
 			rs = pstmt.executeQuery();
 
@@ -220,8 +221,8 @@ public class GruppoDAO{
 		return postCount;
 	}
 	
-	public List<Gruppo> getSuggestedGroups(String idUtente) {
-		List<Gruppo> groups = new ArrayList<>();
+	public List<Group> getSuggestedGroups(String username) {
+		List<Group> groups = new ArrayList<>();
 		
         connection = PgDatabaseConnector.getConnection();
 		if (connection == null) {
@@ -239,15 +240,20 @@ public class GruppoDAO{
 						"SELECT G.tema " +
 						"FROM MembroGruppo MG JOIN Gruppo G " +
 						"ON MG.idGruppo = G.idGruppo " +
-						"WHERE idUtente = ?)" +
+						"WHERE usernameUtente = ?)" +
 					"AND idGruppo NOT IN (" + 
 						"SELECT idGruppo " +
 						"FROM MembroGruppo " +
-						"WHERE idUtente = ?)";
+						"WHERE usernameUtente = ?)" +
+					"AND idGruppo NOT IN (" + 
+						"SELECT idGruppo " + 
+						"FROM RichiestaDiAccesso " + 
+						"WHERE usernameMittente = ?)";
 			
 			pstmt = connection.prepareStatement(cmd);
-            pstmt.setInt(1, Integer.parseInt(idUtente));
-            pstmt.setInt(2, Integer.parseInt(idUtente));
+            pstmt.setString(1, username);
+            pstmt.setString(2, username);
+            pstmt.setString(3, username);
             
 			rs = pstmt.executeQuery();
 
@@ -263,8 +269,8 @@ public class GruppoDAO{
 		return groups;
 	}
 
-	public List<Gruppo> getGroupsOwned(String idUtente) {
-		List<Gruppo> groups = new ArrayList<>();
+	public List<Group> getGroupsOwned(String username) {
+		List<Group> groups = new ArrayList<>();
 		
         connection = PgDatabaseConnector.getConnection();
 		if (connection == null) {
@@ -278,11 +284,11 @@ public class GruppoDAO{
 			String cmd = 
 					"SELECT * " +
 					"FROM Gruppo " +
-					"WHERE idOwner = ? " +
+					"WHERE usernameOwner = ? " +
 					"ORDER BY nome";
 			
 			pstmt = connection.prepareStatement(cmd);
-            pstmt.setInt(1, Integer.parseInt(idUtente));
+            pstmt.setString(1, username);
             
 			rs = pstmt.executeQuery();
 
@@ -298,16 +304,86 @@ public class GruppoDAO{
 		return groups;
 	}
 	
-	public Gruppo createGroup(ResultSet rs) {
-		Gruppo group = null;
+	public boolean isMember(String groupId, String username) {		
+		connection = PgDatabaseConnector.getConnection();
+		if (connection == null) {
+			return false;
+		}
+		
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
 		try {
-			group = new Gruppo(
+			String cmd = 
+					"SELECT COUNT(*) "+ 
+					"FROM MembroGruppo " +
+					"WHERE idGruppo = ? " + 
+					"AND usernameUtente = ?";
+			
+			pstmt = connection.prepareStatement(cmd);
+            pstmt.setInt(1, Integer.parseInt(groupId));
+            pstmt.setString(2, username);
+            
+			rs = pstmt.executeQuery();
+
+			if (rs.next()) {
+				return rs.getInt(1)>0;
+			}
+		} catch (SQLException e) {
+			System.out.println(e);
+		} finally {
+			dbConnector.closeResources(rs, pstmt, connection);
+		}
+		
+		return false;
+	}
+	
+	public List<String> getUserGroupIds(String username) {
+		List<String> groupsIds = new ArrayList<>();
+		
+		connection = PgDatabaseConnector.getConnection();
+		if (connection == null) {
+			return groupsIds;
+		}
+		
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			String cmd = 
+					"SELECT idGruppo "+ 
+					"FROM MembroGruppo " +
+					"WHERE usernameUtente = ?";
+			
+			pstmt = connection.prepareStatement(cmd);
+            pstmt.setString(1, username);
+            
+			rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+            	groupsIds.add(rs.getString("idGruppo"));
+            }
+		} catch (SQLException e) {
+			System.out.println(e);
+		} finally {
+			dbConnector.closeResources(rs, pstmt, connection);
+		}
+		
+		return groupsIds;
+	}
+	
+	public Group createGroup(ResultSet rs) {
+		Group group = null;
+		UserDAO userDAO = new UserDAO();
+		
+		try {
+			group = new Group(
 					String.valueOf(rs.getInt("idGruppo")),
+					userDAO.getByUsername(rs.getString("usernameOwner")),
 					rs.getString("nome"),
-					rs.getTimestamp("dataOraCreazione").toLocalDateTime(),
+					rs.getString("tema"),    
 					rs.getString("descrizione"),                
-					new Tema(rs.getString("tema")),                
-					utenteDAO.getById(String.valueOf(rs.getInt("idOwner")))
+					rs.getTimestamp("dataOraCreazione").toLocalDateTime()
 			);			
 		} catch (Exception e) {
 			e.printStackTrace();

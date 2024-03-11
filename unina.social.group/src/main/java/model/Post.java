@@ -1,81 +1,39 @@
 package model;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 public class Post {
-	private String idPost;
-    private Gruppo gruppo;
-    private Utente autore;
-    private LocalDateTime dataOraPubblicazione;
-    private String testo;
-    private List<String> urlFoto;
-    private String tipo;
-
-    public Post(String idPost, Gruppo gruppo, Utente autore, LocalDateTime dataOraPubblicazione, String testo, List<String> urlFoto, String tipo) {
-        this.idPost = idPost;
-    	this.gruppo = gruppo;
-        this.autore = autore;
-        this.dataOraPubblicazione = dataOraPubblicazione;
-        this.testo = testo;
-        this.urlFoto = urlFoto;
-        this.tipo = tipo;
-    }
-
-    public String getIdPost() {
-        return idPost;
-    }
+	
+	private String id;
+    private String text;
+    private LocalDateTime createdAt;
+    private Group group;
+    private User author;
     
-    public Gruppo getGruppo() {
-        return gruppo;
-    }
-
-    public void setGruppo(Gruppo gruppo) {
-        this.gruppo = gruppo;
-    }
-
-    public Utente getAutore() {
-        return autore;
-    }
-
-    public void setAutore(Utente autore) {
-        this.autore = autore;
-    }
-
-    public LocalDateTime getDataOraPubblicazione() {
-        return dataOraPubblicazione;
-    }
-
-    public void setDataOraPubblicazione(LocalDateTime dataOraPubblicazione) {
-        this.dataOraPubblicazione = dataOraPubblicazione;
-    }
-
-    public String getTesto() {
-        return testo;
-    }
-
-    public void setTesto(String testo) {
-        this.testo = testo;
-    }
-
-    public List<String> getUrlFoto() {
-        return urlFoto;
-    }
-
-    public void setUrlFoto(List<String> urlFoto) {
-        this.urlFoto = urlFoto;
-    }
-
-    public String getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
+	public Post(String text, LocalDateTime createdAt, Group group, User author) {
+		this.text = text;
+		this.createdAt = createdAt;
+		this.group = group;
+		this.author = author;
+	}
     
-    public void setIdPost(String idPost) {
-        this.idPost = idPost;
-    }
-
+	public Post(String id, String text, LocalDateTime createdAt, Group group, User author) {
+		this.id = id;
+		this.text = text;
+		this.createdAt = createdAt;
+		this.group = group;
+		this.author = author;
+	}
+	
+	public String getId() { return id; }
+	public String getText() { return text; }
+	public LocalDateTime getCreatedAt() { return createdAt; }
+	public Group getGroup() { return group; }
+	public User getAuthor() { return author; }
+	
+	public void setId(String id) { this.id = id; }
+	public void setText(String text) { this.text = text; }
+	public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+	public void setGroup(Group group) { this.group = group; }
+	public void setAuthor(User author) { this.author = author; }
 }
