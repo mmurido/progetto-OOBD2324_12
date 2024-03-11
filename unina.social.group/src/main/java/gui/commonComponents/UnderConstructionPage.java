@@ -1,4 +1,4 @@
-package gui;
+package gui.commonComponents;
 
 import javafx.geometry.Pos;
 import javafx.scene.image.ImageView;
